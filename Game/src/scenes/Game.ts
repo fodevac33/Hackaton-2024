@@ -66,7 +66,7 @@ export class Game extends Scene {
     this.input.on("pointerdown", () => {
       indexMessage++;
       if (indexMessage >= messagesProfessor.length) {
-        this.scene.start("GameOver");
+        this.scene.start("Map");
       }
 
       if (indexMessage == 3) {
