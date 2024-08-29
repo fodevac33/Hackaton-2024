@@ -20,9 +20,9 @@ export class Game extends Scene {
       key: "animatedBackground",
       frames: this.anims.generateFrameNumbers("animatedBackground", {
         start: 0,
-        end: 14,
+        end: 35,
       }),
-      frameRate: 30,
+      frameRate: 36,
       repeat: -1,
     });
 
@@ -33,8 +33,8 @@ export class Game extends Scene {
     // this.background = this.add.image(512, 384, "backgroundCity");
     // this.background.setScale(1.2);
     this.professor = this.add.image(940, 500, "professor");
-    this.cloud = this.add.image(450, 340, "cloudSpeech");
-    this.cloud.setScale(1.2);
+    this.cloud = this.add.image(450, 600, "cloudSpeech");
+    this.cloud.setScale(0.32);
     this.gpu = this.add.image(500, 150, "gpu");
     this.gpu.setVisible(false);
     this.gpu.setScale(0.3);
