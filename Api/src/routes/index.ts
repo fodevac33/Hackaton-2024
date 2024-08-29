@@ -41,7 +41,9 @@ router.get('/level/:levelNumber', async (req: Request, res: Response) => {
     }
 
     const data = await openRouterResponse.json();
-    res.json(data);
+    const { content } = data.choices[0].message;
+    
+    res.json(content);
 
   } catch (error) {
     console.error('Error:', error);

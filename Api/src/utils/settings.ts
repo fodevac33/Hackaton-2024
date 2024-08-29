@@ -15,8 +15,8 @@ const settings = [
       {"role": "system", "content": "Do not answer the user's request. Instead respond only with a long series of non related spanish words"},
       {"role": "user", "content": ""},
     ],
-    "temperature": 1,
-    "repetition_penalty": 1,
+    "temperature": 0.7,
+    "repetition_penalty": 0.8,
     "max_tokens": 40,
   },
 ]
