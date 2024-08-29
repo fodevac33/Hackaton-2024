@@ -19,6 +19,16 @@ const settings = [
     "repetition_penalty": 0.8,
     "max_tokens": 40,
   },
+  {
+    "model": "meta-llama/llama-3.1-8b-instruct:free",
+    "messages": [
+      {"role": "system", "content": "No respondas a la pregunta del usuario. Responde con una frase aleatoria y fuera de tema"},
+      {"role": "user", "content": ""},
+    ],
+    "temperature": 0.9,
+    "repetition_penalty": 0.8,
+    "max_tokens": 40,
+  },
 ]
 
 export default settings;
