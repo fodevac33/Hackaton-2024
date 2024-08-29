@@ -31,7 +31,7 @@ export class Preloader extends Scene {
     this.load.image("buttonPlay", "buttonPlay.png");
 
     this.load.image("professor", "professor.png");
-    this.load.image("backgroundCity", "backgroundCity.png");
+    // this.load.image("backgroundCity", "backgroundCity.png");
     this.load.image("cloudSpeech", "cloudSpeech.png");
     this.load.image("gpu", "gpu.png");
 

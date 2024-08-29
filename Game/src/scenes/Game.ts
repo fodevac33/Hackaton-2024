@@ -20,20 +20,19 @@ export class Game extends Scene {
       key: "animatedBackground",
       frames: this.anims.generateFrameNumbers("animatedBackground", {
         start: 0,
-        end: 15,
+        end: 14,
       }),
-      frameRate: 10,
+      frameRate: 30,
       repeat: -1,
     });
 
     const background = this.add.sprite(512, 384, "animatedBackground");
     background.setOrigin(0.5, 0.5);
-    background.play("animateBackground");
+    background.play("animatedBackground");
 
     // this.background = this.add.image(512, 384, "backgroundCity");
     // this.background.setScale(1.2);
     this.professor = this.add.image(940, 500, "professor");
-    this.professor.setScale(2.2);
     this.cloud = this.add.image(450, 340, "cloudSpeech");
     this.cloud.setScale(1.2);
     this.gpu = this.add.image(500, 150, "gpu");
