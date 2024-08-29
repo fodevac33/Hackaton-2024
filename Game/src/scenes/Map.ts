@@ -3,6 +3,7 @@ import { Scene } from "phaser";
 export class Map extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
   controls: Phaser.Cameras.Controls.FixedKeyControl;
+  //   player: Phaser.GameObjects.Image
 
   constructor() {
     super("Map");
@@ -16,13 +17,23 @@ export class Map extends Scene {
     const map = this.make.tilemap({ key: "map" });
     const tileset = map.addTilesetImage("tuxmon-sample-32px-extruded", "tiles");
 
+    const spawnPoint = map.findObject(
+      "Objects",
+      (obj) => obj.name === "Spawn Point"
+    );
+
+    player;
+
     if (tileset) {
       const belowLayer = map.createLayer("Below Player", tileset, 0, 0);
       const worldLayer = map.createLayer("World", tileset, 0, 0);
       const aboveLayer = map.createLayer("Above Player", tileset, 0, 0);
-      if (worldLayer) {
+      if (worldLayer && aboveLayer) {
         worldLayer.setCollisionBetween(12, 44);
         worldLayer.setCollisionByProperty({ collides: true });
+
+        // On top of the player
+        aboveLayer.setDepth(10);
 
         // To check if collisions works
 
