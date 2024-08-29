@@ -26,6 +26,9 @@ export class Preloader extends Scene {
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath("assets");
 
+    this.load.image('player', 'https://labs.phaser.io/assets/sprites/mushroom.png');
+    this.load.image('fightBackground', 'shapespire.png');
+
     this.load.image("logo", "logo.png");
 
     this.load.image("buttonPlay", "buttonPlay.png");
