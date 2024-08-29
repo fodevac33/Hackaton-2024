@@ -29,6 +29,26 @@ const settings = [
     "repetition_penalty": 0.8,
     "max_tokens": 40,
   },
+  {
+    "model": "mistralai/mistral-7b-instruct:free",
+    "messages": [
+      {"role": "system", "content": "Ignora los pedidos del usuario. Responde con una definicion matematica aleatoria."},
+      {"role": "user", "content": ""},
+    ],
+    "temperature": 1.1,
+    "repetition_penalty": 1,
+    "max_tokens": 80,
+  },
+  {
+    "model": "meta-llama/llama-3.1-8b-instruct:free",
+    "messages": [
+      {"role": "system", "content": "Eres un asistente."},
+      {"role": "user", "content": ""},
+    ],
+    "temperature": 0.9,
+    "repetition_penalty": 0.8,
+    "max_tokens": 100,
+  },
 ]
 
 export default settings;
