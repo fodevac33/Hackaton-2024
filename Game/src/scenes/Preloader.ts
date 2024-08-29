@@ -1,4 +1,6 @@
 import { Scene } from "phaser";
+// @ts-ignore
+import * as WebFontLoader from "../../lib/webfontloader.js";
 
 export class Preloader extends Scene {
   constructor() {
@@ -25,6 +27,12 @@ export class Preloader extends Scene {
   preload() {
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath("assets");
+
+    WebFontLoader.default.load({
+      custom: {
+        families: ["Kenney Mini Square"],
+      },
+    });
 
     this.load.image("logo", "logo.png");
 

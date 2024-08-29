@@ -52,14 +52,13 @@ export class Game extends Scene {
     ];
     let indexMessage = 0;
 
-    this.msg_text = this.add.text(450, 320, messagesProfessor[indexMessage], {
-      fontFamily: "Arial Black",
-      fontSize: 24,
-      color: "#ffffff",
-      stroke: "#000000",
-      strokeThickness: 5,
+    this.msg_text = this.add.text(450, 595, messagesProfessor[indexMessage], {
+      fontFamily: "Kenney Mini Square",
+      fontSize: 40,
+      color: "#000000",
       align: "center",
       wordWrap: { width: 700, useAdvancedWrap: true },
+      fontStyle: "bold",
     });
     this.msg_text.setOrigin(0.5);
     this.msg_text.setScale(1);
