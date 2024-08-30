@@ -1,21 +1,43 @@
 import { Scene } from "phaser";
+import { resolution } from "../main";
 
 export class Map extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
   controls: Phaser.Cameras.Controls.FixedKeyControl;
   player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   cursor: Phaser.Types.Input.Keyboard.CursorKeys;
+  gpu: Phaser.GameObjects.Image;
+  score: Phaser.GameObjects.Text;
 
   constructor() {
     super("Map");
   }
 
-  preload() {}
+  preload() {
+    this.cameras.main.fadeIn(6000);
+  }
 
   create() {
     this.camera = this.cameras.main;
     const map = this.make.tilemap({ key: "map" });
     this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.gpu = this.add.image(100, 50, "gpu");
+    this.gpu.setScale(0.15);
+    this.gpu.setScrollFactor(0);
+    this.gpu.setDepth(20);
+
+    let score = 0;
+    this.score = this.add.text(160, 18, score.toString(), {
+      fontFamily: "Kenney Mini Square",
+      fontSize: 40,
+      color: "#fff",
+      stroke: "#000",
+      strokeThickness: 5,
+      align: "center",
+      fontStyle: "bold",
+    });
+    this.score.setScrollFactor(0);
+    this.score.setDepth(20);
 
     const tileset = map.addTilesetImage("tuxmon-sample-32px-extruded", "tiles");
     this.player = this.physics.add.sprite(400, 350, "player", "misa-front");
