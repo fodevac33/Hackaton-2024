@@ -15,24 +15,32 @@ export class Map extends Scene {
   create() {
     this.camera = this.cameras.main;
     const map = this.make.tilemap({ key: "map" });
+    this.camera.setZoom(2.8, 2.8);
     this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
-    const tileset = map.addTilesetImage("tuxmon-sample-32px-extruded", "tiles");
+    const tileset1 = map.addTilesetImage("base_design_opt2", "tile1");
+    const tileset2 = map.addTilesetImage("base_design", "tile2");
     this.player = this.physics.add.sprite(400, 350, "player", "misa-front");
 
-    if (!tileset) {
+    if (!tileset1 || !tileset2) {
       return null;
     }
 
-    const belowLayer = map.createLayer("Below Player", tileset, 0, 0);
-    const worldLayer = map.createLayer("World", tileset, 0, 0);
-    const aboveLayer = map.createLayer("Above Player", tileset, 0, 0);
+    const belowLayer = map.createLayer(
+      "BelowPlayer",
+      [tileset1, tileset2],
+      0,
+      0
+    );
+    const worldLayer = map.createLayer("World", [tileset1, tileset2], 0, 0);
+    const aboveLayer = map.createLayer(
+      "AbovePlayer",
+      [tileset1, tileset2],
+      0,
+      0
+    );
 
-    if (!worldLayer) {
-      return null;
-    }
-
-    if (!aboveLayer) {
+    if (!worldLayer || !aboveLayer) {
       return null;
     }
 
@@ -51,10 +59,12 @@ export class Map extends Scene {
     //   faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
     // });
 
-    const spawnPoint = map.findObject(
-      "Objects",
-      (obj) => obj.name === "Spawn Point"
+    const spawnLayer = map.getObjectLayer("Spawn Point");
+
+    const spawnPoint = spawnLayer?.objects.find(
+      (obj) => obj.name === "" // Find the object with an empty name
     );
+    console.log(spawnPoint);
 
     if (spawnPoint && spawnPoint.x && spawnPoint.y) {
       this.player = this.physics.add
@@ -64,6 +74,8 @@ export class Map extends Scene {
     }
 
     this.physics.add.collider(this.player, worldLayer);
+
+    this.player.setScale(0.4);
 
     // Animations player
 
@@ -128,6 +140,7 @@ export class Map extends Scene {
       });
     }
 
+    this.player = this.player.setDepth(20);
     this.camera.startFollow(this.player);
     this.camera.setBackgroundColor(0x00ff00);
   }
