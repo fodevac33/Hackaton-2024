@@ -119,7 +119,7 @@ export class Fight extends Scene {
 
   spawnProjectile() {
     const projectile = this.projectiles.create(this.player.x, 0, 'projectile') as Types.Physics.Arcade.ImageWithDynamicBody;
-    projectile.setScale(0.15);
+    projectile.setScale(0.12, 0.15);
     projectile.setAngle(90);
     projectile.refreshBody();
     projectile.body.setSize(projectile.height * 0.9, projectile.width * 0.9);
