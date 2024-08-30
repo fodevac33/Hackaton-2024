@@ -9,8 +9,7 @@ export class Fight extends Scene {
   player: Types.Physics.Arcade.ImageWithDynamicBody;
   wall: Physics.Arcade.StaticGroup;
   cursors: Types.Input.Keyboard.CursorKeys;
-  projectile: Types.Physics.Arcade.ImageWithDynamicBody;
-  angle: number
+  projectiles: Physics.Arcade.Group;
   lives: number = 3
   lifeText: string[]
 
@@ -70,7 +69,6 @@ export class Fight extends Scene {
       "Vidas I I I"
     ]
 
-
     this.lives_text = this.add.text(position(25, 1, "w"), position(18, 3, "h"), this.lifeText[this.lives-1], {
       fontFamily: "Kenney Mini Square",
       fontSize: 70,
@@ -83,28 +81,24 @@ export class Fight extends Scene {
     this.player = this.physics.add.image(position(2, 1, "w"), position(2, 1, "h"), 'fighter');
     this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, this.wall);
-  
-    this.projectile = this.physics.add.image(position(2, 1, "w"), position(2, 2, "h"), 'projectile');
-    this.projectile.setScale(0.15);
-    this.projectile.setAngle(90);
-    this.projectile.refreshBody();
-    this.projectile.body.setSize(this.projectile.height*0.9, this.projectile.width*0.9)
 
-    this.angle = Phaser.Math.Angle.Between(
-      this.projectile.x,
-      this.projectile.y,
-      this.player.x,
-      this.player.y
-    );
-    
+    this.projectiles = this.physics.add.group();
+
     this.physics.add.overlap( 
       this.player,
-      this.projectile,
+      this.projectiles,
       this.hitProjectile as Types.Physics.Arcade.ArcadePhysicsCallback,
       undefined,
       this
     );
 
+    // Set up timer to spawn projectiles
+    this.time.addEvent({
+      delay: 2000,
+      callback: this.spawnProjectile,
+      callbackScope: this,
+      loop: true
+    });
   }
 
   update() {
@@ -121,17 +115,26 @@ export class Fight extends Scene {
     } else if (this.cursors.down.isDown) {
       this.player.setVelocityY(300);
     }
-
-    if (this.projectile.body) {
-      this.moveProjectileTowardsPlayer();
-    }
   }
 
-  moveProjectileTowardsPlayer() {
+  spawnProjectile() {
+    const projectile = this.projectiles.create(this.player.x, 0, 'projectile') as Types.Physics.Arcade.ImageWithDynamicBody;
+    projectile.setScale(0.15);
+    projectile.setAngle(90);
+    projectile.refreshBody();
+    projectile.body.setSize(projectile.height * 0.9, projectile.width * 0.9);
+
+    const angle = Phaser.Math.Angle.Between(
+      projectile.x,
+      projectile.y,
+      this.player.x,
+      this.player.y
+    );
+
     const speed = 100;
-    this.projectile.setVelocity(
-      Math.cos(this.angle) * speed,
-      Math.sin(this.angle) * speed,
+    projectile.setVelocity(
+      Math.cos(angle) * speed,
+      Math.sin(angle) * speed
     );
   }
 
