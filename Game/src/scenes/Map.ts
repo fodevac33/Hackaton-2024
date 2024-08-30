@@ -9,6 +9,8 @@ export class Map extends Scene {
   model_idle: Phaser.GameObjects.Image;
   gpu: Phaser.GameObjects.Image;
   score: Phaser.GameObjects.Text;
+  modelZone: Phaser.GameObjects.Zone;
+  fightTriggered: boolean;
 
   constructor() {
     super("Map");
@@ -80,8 +82,15 @@ export class Map extends Scene {
       0,
       0
     );
+    const borderLayer = map.createLayer("Border", [tileset1, tileset2], 0, 0);
+    borderLayer?.setCollisionByProperty({ collides: true });
+    borderLayer?.setVisible(false);
 
     if (!worldLayer || !aboveLayer) {
+      return null;
+    }
+
+    if (!worldLayer || !borderLayer) {
       return null;
     }
 
@@ -118,8 +127,8 @@ export class Map extends Scene {
       spawnPoint.y &&
       globalData.spawnPoint.x == 0
     ) {
-      setSpawnPoint(spawnPoint?.x, spawnPoint?.y);
-      globalData.spawnPoint = { x: spawnPoint.x, y: spawnPoint.y };
+      setSpawnPoint(spawnPoint?.x, spawnPoint?.y-100);
+      globalData.spawnPoint = { x: spawnPoint.x, y: spawnPoint.y - 100 };
     } else {
       setSpawnPoint(globalData.spawnPoint.x, globalData.spawnPoint.y);
     }
@@ -158,8 +167,33 @@ export class Map extends Scene {
     }
 
     //-----------------------------/SE AGREGA TERAFLOPS EN EL MAPA---------------------------//
+    //------------------------------SE AGREGA MODEL EN EL INICIO---------------------------------//
+    const modelHome = map.getObjectLayer("Model")["objects"][0];
+    this.modelZone = this.add.zone(
+      modelHome?.x,
+      modelHome?.y,
+      modelHome?.width,
+      modelHome?.height
+    );
+    this.physics.world.enable(this.modelZone);
+    this.modelZone.body.setAllowGravity(false);
+    this.modelZone.body.moves = false;
+    if (this.modelZone) {
+      console.log("Building x:", this.modelZone.x, "Building y:", this.modelZone.y);
+    }
+    // In the create method, add an overlap collider
+    this.physics.add.overlap(
+      this.player,
+      this.modelZone,
+      this.triggerFightScene,
+      null,
+      this
+    );
+
+    //------------------------------/SE AGREGA MODEL EN EL INICIO---------------------------------//
 
     this.physics.add.collider(this.player, worldLayer);
+    this.physics.add.collider(this.player, borderLayer);
 
     this.player.setScale(0.4);
 
@@ -232,9 +266,21 @@ export class Map extends Scene {
     this.camera.startFollow(this.player);
     this.camera.setBackgroundColor(0x00ff00);
   }
+  triggerFightScene() {
+    // Switch to the FightScene
+    console.log("cambio"); // Make sure 'FightScene' is the key of your fight scene
+  }
 
   update(time: number, delta: number): void {
     this.controls.update(delta);
+    const proximityThreshold = 10;
+    const distance = Phaser.Math.Distance.Between(
+      this.player.x, this.player.y,
+      this.modelZone.x, this.modelZone.y
+    );
+    if (distance < proximityThreshold && !this.fightTriggered) {
+      this.triggerFightScene();
+    }
     const speed = 175;
     const prevVelocity = this.player.body.velocity.clone();
 
