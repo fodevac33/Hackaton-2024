@@ -7,10 +7,21 @@ import { Preloader } from "./scenes/Preloader";
 import { Map } from "./scenes/Map";
 
 import { Game, Types } from "phaser";
+import { Info } from "./scenes/Info";
 
 export const resolution = {
   width: 1024,
   height: 768,
+};
+
+export const globalData = {
+  teraflops: 0,
+  coolDataIndex: 0,
+  level: 1,
+  spawnPoint: {
+    x: 0,
+    y: 0,
+  },
 };
 
 //  Find out more information about the Game Config at:
@@ -33,7 +44,7 @@ const config: Types.Core.GameConfig = {
   },
   pixelArt: true,
 
-  scene: [Boot, Preloader, MainMenu, Intro, GameOver, Map, Fight],
+  scene: [Boot, Preloader, MainMenu, Intro, GameOver, Map, Fight, Info],
 };
 
 export default new Game(config);

@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import { resolution } from "../main";
+import { globalData, resolution } from "../main";
 
 export class Map extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
@@ -14,7 +14,7 @@ export class Map extends Scene {
   }
 
   preload() {
-    this.cameras.main.fadeIn(6000);
+    this.cameras.main.fadeIn(3000);
   }
 
   create() {
@@ -22,23 +22,22 @@ export class Map extends Scene {
     const map = this.make.tilemap({ key: "map" });
     this.camera.setZoom(2.8, 2.8);
     this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    this.gpu = this.add.image(100, 50, "gpu");
-    this.gpu.setScale(0.15);
+    this.gpu = this.add.image(360, 270, "gpu");
+    this.gpu.setScale(0.06);
     this.gpu.setScrollFactor(0);
     this.gpu.setDepth(20);
 
-    let score = 0;
-    this.score = this.add.text(160, 18, score.toString(), {
+    this.score = this.add.text(385, 258, globalData.teraflops.toString(), {
       fontFamily: "Kenney Mini Square",
-      fontSize: 40,
+      fontSize: 14,
       color: "#fff",
       stroke: "#000",
-      strokeThickness: 5,
+      strokeThickness: 3,
       align: "center",
-      fontStyle: "bold",
+      // fontStyle: "bold",
     });
     this.score.setScrollFactor(0);
-    this.score.setDepth(20);
+    this.score.setDepth(40);
 
     const tileset1 = map.addTilesetImage("base_design_opt2", "tile1");
     const tileset2 = map.addTilesetImage("base_design", "tile2");
@@ -82,17 +81,49 @@ export class Map extends Scene {
     // });
 
     const spawnLayer = map.getObjectLayer("Spawn Point");
-
     const spawnPoint = spawnLayer?.objects.find(
       (obj) => obj.name === "" // Find the object with an empty name
     );
-    console.log(spawnPoint);
 
-    if (spawnPoint && spawnPoint.x && spawnPoint.y) {
+    const setSpawnPoint = (x: number, y: number) => {
       this.player = this.physics.add
-        .sprite(spawnPoint.x, spawnPoint.y, "player", "misa-front")
+        .sprite(x, y, "player", "misa-front")
         .setSize(30, 40)
         .setOffset(0, 24);
+    };
+
+    if (
+      spawnPoint &&
+      spawnPoint.x &&
+      spawnPoint.y &&
+      globalData.spawnPoint.x == 0
+    ) {
+      setSpawnPoint(spawnPoint?.x, spawnPoint?.y);
+      globalData.spawnPoint = { x: spawnPoint.x, y: spawnPoint.y };
+    } else {
+      setSpawnPoint(globalData.spawnPoint.x, globalData.spawnPoint.y);
+    }
+
+    const teraflopLayer = map.getObjectLayer("Teraflops");
+
+    if (teraflopLayer) {
+      const teraflops = this.physics.add.staticGroup();
+
+      teraflopLayer.objects.forEach((objData) => {
+        const { x = 0, y = 0, width = 0, height = 0 } = objData;
+        const teraflop = this.add.rectangle(
+          x + width / 2,
+          y + height / 2,
+          width - 20,
+          height - 20
+        );
+        teraflops.add(teraflop);
+      });
+
+      this.physics.add.overlap(this.player, teraflops, () => {
+        globalData.spawnPoint = { x: this.player.x, y: this.player.y };
+        this.scene.start("Info");
+      });
     }
 
     this.physics.add.collider(this.player, worldLayer);
