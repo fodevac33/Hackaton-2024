@@ -6,6 +6,7 @@ export class Map extends Scene {
   controls: Phaser.Cameras.Controls.FixedKeyControl;
   player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   cursor: Phaser.Types.Input.Keyboard.CursorKeys;
+  model_idle: Phaser.GameObjects.Image;
   gpu: Phaser.GameObjects.Image;
   score: Phaser.GameObjects.Text;
 
@@ -36,12 +37,31 @@ export class Map extends Scene {
       align: "center",
       // fontStyle: "bold",
     });
+
     this.score.setScrollFactor(0);
     this.score.setDepth(40);
 
     const tileset1 = map.addTilesetImage("base_design_opt2", "tile1");
     const tileset2 = map.addTilesetImage("base_design", "tile2");
     this.player = this.physics.add.sprite(400, 350, "player", "misa-front");
+
+    this.anims.create({
+      key: "model_idle",
+      frames: this.anims.generateFrameNumbers("model_idle", {
+        start: 0,
+        end: 4,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
+    const model_idle = this.add.sprite(
+      map.widthInPixels / 2 + 45,
+      map.heightInPixels / 2 + 95,
+      "model_idle"
+    );
+    model_idle.play("model_idle");
+    model_idle.setScale(globalData.modelLevel);
 
     if (!tileset1 || !tileset2) {
       return null;
@@ -207,6 +227,8 @@ export class Map extends Scene {
     }
 
     this.player = this.player.setDepth(20);
+    model_idle.setDepth(20);
+
     this.camera.startFollow(this.player);
     this.camera.setBackgroundColor(0x00ff00);
   }

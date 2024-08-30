@@ -48,6 +48,11 @@ export class Preloader extends Scene {
       frameHeight: 768,
     });
 
+    this.load.spritesheet("model_idle", "model_idle.png", {
+      frameWidth: 80,
+      frameHeight: 80,
+    });
+
     this.load.image("tile1", "/tilesets/CP_V1.0.4.png");
     this.load.image("tile2", "/tilesets/tilemap_packed.png");
     this.load.tilemapTiledJSON("map", "/tilemaps/AI_Land.json");

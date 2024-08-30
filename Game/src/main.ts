@@ -23,6 +23,7 @@ export const globalData = {
     x: 0,
     y: 0,
   },
+  modelLevel: 1,
 };
 
 //  Find out more information about the Game Config at:
