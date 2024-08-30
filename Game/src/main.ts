@@ -1,5 +1,5 @@
 import { Boot } from "./scenes/Boot";
-import { Game as MainGame } from "./scenes/Game";
+import { Intro } from "./scenes/Intro";
 import { Fight } from "./scenes/Fight"
 import { GameOver } from "./scenes/GameOver";
 import { MainMenu } from "./scenes/MainMenu";
@@ -27,7 +27,7 @@ const config: Types.Core.GameConfig = {
     },
   },
 
-  scene: [Boot, Preloader, MainMenu, MainGame, GameOver, Map],
+  scene: [Boot, Preloader, MainMenu, Intro, GameOver, Map, Fight],
 };
 
 export default new Game(config);
