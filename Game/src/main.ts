@@ -5,6 +5,7 @@ import { GameOver } from "./scenes/GameOver";
 import { MainMenu } from "./scenes/MainMenu";
 import { Preloader } from "./scenes/Preloader";
 import { Map } from "./scenes/Map";
+import { MathFight } from "./scenes/MathFight";
 import { Model } from "./scenes/Model";
 import { Info } from "./scenes/Info";
 
@@ -80,7 +81,7 @@ const config: Types.Core.GameConfig = {
     Map,
     BookFight,
     DictFight,
-    Info,
+    MathFight,
   ],
 };
 
