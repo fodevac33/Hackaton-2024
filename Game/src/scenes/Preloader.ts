@@ -48,8 +48,14 @@ export class Preloader extends Scene {
       frameHeight: 768,
     });
 
-    this.load.image("tiles", "/tilesets/tuxmon-sample-32px-extruded.png");
-    this.load.tilemapTiledJSON("map", "/tilemaps/tuxemon-town.json");
+    this.load.spritesheet("model_idle", "model_idle.png", {
+      frameWidth: 80,
+      frameHeight: 80,
+    });
+
+    this.load.image("tile1", "/tilesets/CP_V1.0.4.png");
+    this.load.image("tile2", "/tilesets/tilemap_packed.png");
+    this.load.tilemapTiledJSON("map", "/tilemaps/AI_Land.json");
     this.load.atlas("player", "/player/atlas.png", "/player/atlas.json");
   }
 

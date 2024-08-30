@@ -4,7 +4,6 @@ export class MainMenu extends Scene {
   background: GameObjects.Image;
   logo: GameObjects.Image;
   buttonPlay: GameObjects.Image;
-  title: GameObjects.Text;
 
   constructor() {
     super("MainMenu");
@@ -18,7 +17,7 @@ export class MainMenu extends Scene {
     this.buttonPlay = this.add.image(512, 500, "buttonPlay");
 
     this.input.once("pointerdown", () => {
-      this.scene.start("Intro");
+      this.scene.start("Map");
     });
   }
 }
