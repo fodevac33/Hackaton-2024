@@ -103,28 +103,40 @@ export class Map extends Scene {
     } else {
       setSpawnPoint(globalData.spawnPoint.x, globalData.spawnPoint.y);
     }
-
+    //-----------------------------SE AGREGA TERAFLOPS EN EL MAPA---------------------------//
     const teraflopLayer = map.getObjectLayer("Teraflops");
-
     if (teraflopLayer) {
-      const teraflops = this.physics.add.staticGroup();
-
-      teraflopLayer.objects.forEach((objData) => {
-        const { x = 0, y = 0, width = 0, height = 0 } = objData;
-        const teraflop = this.add.rectangle(
-          x + width / 2,
-          y + height / 2,
-          width - 20,
-          height - 20
-        );
-        teraflops.add(teraflop);
+      const teraflops = this.physics.add.group({
+        classType: Phaser.Physics.Arcade.Image,
       });
 
-      this.physics.add.overlap(this.player, teraflops, () => {
+      const numTeraflops = 5;
+      let count = 0;
+      while (count < numTeraflops) {
+        const x = Phaser.Math.RND.between(0, map.widthInPixels);
+        const y = Phaser.Math.RND.between(0, map.heightInPixels);
+        // Comprobar si la posición está en una zona no colisionable
+        if (
+          !worldLayer.getTileAtWorldXY(x, y) ||
+          !worldLayer.getTileAtWorldXY(x, y).collides
+        ) {
+          const teraflop = this.physics.add.image(x, y, "teraflopTexture");
+          teraflop.setInteractive();
+          teraflops.add(teraflop);
+          count++;
+        }
+      }
+
+      this.physics.add.overlap(this.player, teraflops, (player, teraflop) => {
         globalData.spawnPoint = { x: this.player.x, y: this.player.y };
         this.scene.start("Info");
+        teraflop.destroy();
+        globalData.teraflops += 1;
+        this.score.setText(globalData.teraflops.toString());
       });
     }
+
+    //-----------------------------/SE AGREGA TERAFLOPS EN EL MAPA---------------------------//
 
     this.physics.add.collider(this.player, worldLayer);
 
