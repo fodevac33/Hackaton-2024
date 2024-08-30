@@ -4,7 +4,6 @@ export class MainMenu extends Scene {
   background: GameObjects.Image;
   logo: GameObjects.Image;
   buttonPlay: GameObjects.Image;
-  title: GameObjects.Text;
 
   constructor() {
     super("MainMenu");
