@@ -6,6 +6,7 @@ import { MainMenu } from "./scenes/MainMenu";
 import { Preloader } from "./scenes/Preloader";
 import { Map } from "./scenes/Map";
 import { Model } from "./scenes/Model";
+import { Info } from "./scenes/Info";
 
 import { Game, Types } from "phaser";
 import { DictFight } from "./scenes/DictFight";
@@ -79,6 +80,7 @@ const config: Types.Core.GameConfig = {
     Map,
     BookFight,
     DictFight,
+    Info,
   ],
 };
 

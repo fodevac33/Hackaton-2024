@@ -1,4 +1,4 @@
-import { GameObjects, Types, Physics, Actions } from "phaser";
+import { GameObjects, Types, Physics, Actions, Sound } from "phaser";
 import { Scene } from "phaser";
 import { position } from "../main";
 
@@ -10,6 +10,7 @@ export class BookFight extends Scene {
   wall: Physics.Arcade.StaticGroup;
   cursors: Types.Input.Keyboard.CursorKeys;
   projectiles: Physics.Arcade.Group;
+  music: Sound.WebAudioSound | Sound.NoAudioSound | Sound.HTML5AudioSound;
   lives: number = 3;
   lifeText: string[];
 
@@ -31,8 +32,8 @@ export class BookFight extends Scene {
   }
 
   create() {
-    const music = this.sound.add("bach");
-    music.play("", {
+    this.music = this.sound.add("bach");
+    this.music.play("", {
       volume: 0.7,
     });
 
@@ -133,6 +134,11 @@ export class BookFight extends Scene {
       this.player.setVelocityY(-300);
     } else if (this.cursors.down.isDown) {
       this.player.setVelocityY(300);
+    }
+
+    if (this.lives == 0) {
+      this.music.stop();
+      this.scene.start("Map");
     }
   }
 
