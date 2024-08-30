@@ -5,6 +5,7 @@ import { GameOver } from "./scenes/GameOver";
 import { MainMenu } from "./scenes/MainMenu";
 import { Preloader } from "./scenes/Preloader";
 import { Map } from "./scenes/Map";
+import { Model } from "./scenes/Model";
 
 import { Game, Types } from "phaser";
 import { Info } from "./scenes/Info";
@@ -44,7 +45,7 @@ const config: Types.Core.GameConfig = {
   },
   pixelArt: true,
 
-  scene: [Boot, Preloader, MainMenu, Intro, GameOver, Map, Fight, Info],
+  scene: [Boot, Preloader, MainMenu, Intro, GameOver, Map, Fight, Info, Model],
 };
 
 export default new Game(config);
