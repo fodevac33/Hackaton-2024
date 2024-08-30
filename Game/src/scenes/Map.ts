@@ -127,11 +127,34 @@ export class Map extends Scene {
       spawnPoint.y &&
       globalData.spawnPoint.x == 0
     ) {
-      setSpawnPoint(spawnPoint?.x, spawnPoint?.y-100);
+      setSpawnPoint(spawnPoint?.x, spawnPoint?.y - 100);
       globalData.spawnPoint = { x: spawnPoint.x, y: spawnPoint.y - 100 };
     } else {
       setSpawnPoint(globalData.spawnPoint.x, globalData.spawnPoint.y);
     }
+
+    const arenasLayer = map.getObjectLayer("Arenas");
+
+    if (arenasLayer) {
+      const arenas = this.physics.add.staticGroup();
+      arenasLayer.objects.forEach((objData) => {
+        const { x = 0, y = 0, width = 0, height = 0 } = objData;
+        const arena = this.add.rectangle(
+          x + width / 2,
+          y + height / 2,
+          width - 20,
+          height - 20
+        );
+        arenas.add(arena);
+      });
+
+      this.physics.add.overlap(this.player, arenas, () => {
+        globalData.spawnPoint = { x: this.player.x, y: this.player.y };
+        this.score.setText(globalData.teraflops.toString());
+        this.scene.start("BookFight");
+      });
+    }
+
     //-----------------------------SE AGREGA TERAFLOPS EN EL MAPA---------------------------//
     const teraflopLayer = map.getObjectLayer("Teraflops");
     if (teraflopLayer) {
@@ -179,7 +202,12 @@ export class Map extends Scene {
     this.modelZone.body.setAllowGravity(false);
     this.modelZone.body.moves = false;
     if (this.modelZone) {
-      console.log("Building x:", this.modelZone.x, "Building y:", this.modelZone.y);
+      console.log(
+        "Building x:",
+        this.modelZone.x,
+        "Building y:",
+        this.modelZone.y
+      );
     }
     // In the create method, add an overlap collider
     this.physics.add.overlap(
@@ -275,8 +303,10 @@ export class Map extends Scene {
     this.controls.update(delta);
     const proximityThreshold = 10;
     const distance = Phaser.Math.Distance.Between(
-      this.player.x, this.player.y,
-      this.modelZone.x, this.modelZone.y
+      this.player.x,
+      this.player.y,
+      this.modelZone.x,
+      this.modelZone.y
     );
     if (distance < proximityThreshold && !this.fightTriggered) {
       this.triggerFightScene();

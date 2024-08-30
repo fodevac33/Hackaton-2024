@@ -10,44 +10,57 @@ export class BookFight extends Scene {
   wall: Physics.Arcade.StaticGroup;
   cursors: Types.Input.Keyboard.CursorKeys;
   projectiles: Physics.Arcade.Group;
-  lives: number = 3
-  lifeText: string[]
+  lives: number = 3;
+  lifeText: string[];
 
   constructor() {
     super("BookFight");
   }
 
   preload() {
+    this.cameras.main.fadeIn(3000);
     this.load.setPath("assets/book_fight");
 
-    this.load.audio('bach', 'audio/bach_cantata.mp3');
-    this.load.audio('sfx', 'audio/sfx.wav');
+    this.load.audio("bach", "audio/bach_cantata.mp3");
+    this.load.audio("sfx", "audio/sfx.wav");
 
-    this.load.image('shakespire', 'image/shakespire.png');
-    this.load.image('wall', 'image/wall.jpg');
-    this.load.image('title', 'image/title.png');
-    this.load.image('projectile', 'image/projectile.png');
+    this.load.image("shakespire", "image/shakespire.png");
+    this.load.image("wall", "image/wall.jpg");
+    this.load.image("title", "image/title.png");
+    this.load.image("projectile", "image/projectile.png");
   }
 
   create() {
-    const music = this.sound.add('bach');
-    music.play('', {
-      volume: 0.7
+    const music = this.sound.add("bach");
+    music.play("", {
+      volume: 0.7,
     });
 
     if (this.input.keyboard?.createCursorKeys()) {
       this.cursors = this.input.keyboard.createCursorKeys();
     }
 
-    this.background = this.add.image(position(2, 1, "w"), position(2, 1, "h"), "shakespire");
+    this.background = this.add.image(
+      position(2, 1, "w"),
+      position(2, 1, "h"),
+      "shakespire"
+    );
     this.background.setScale(0.8, 0.7);
 
-    this.title = this.add.image(position(2, 1, "w"), position(8, 7, "h"), "title");
+    this.title = this.add.image(
+      position(2, 1, "w"),
+      position(8, 7, "h"),
+      "title"
+    );
 
     this.wall = this.physics.add.staticGroup();
     const scale = 0.15;
     for (let i = 0; i < 55; i++) {
-      const wallObject = this.wall.create(0, 0, 'wall') as Phaser.Physics.Arcade.Image;
+      const wallObject = this.wall.create(
+        0,
+        0,
+        "wall"
+      ) as Phaser.Physics.Arcade.Image;
       wallObject.setScale(scale);
       wallObject.refreshBody();
     }
@@ -62,22 +75,27 @@ export class BookFight extends Scene {
     );
     this.wall.refresh();
 
-    this.lifeText = [
-      "Vidas I",
-      "Vidas I I",
-      "Vidas I I I"
-    ]
+    this.lifeText = ["Vidas I", "Vidas I I", "Vidas I I I"];
 
-    this.lives_text = this.add.text(position(25, 1, "w"), position(18, 3, "h"), this.lifeText[this.lives-1], {
-      fontFamily: "Kenney Mini Square",
-      fontSize: 70,
-      color: "#7d6e31",
-      align: "center",
-      wordWrap: { width: 700, useAdvancedWrap: true },
-      fontStyle: "bold",
-    });
+    this.lives_text = this.add.text(
+      position(25, 1, "w"),
+      position(18, 3, "h"),
+      this.lifeText[this.lives - 1],
+      {
+        fontFamily: "Kenney Mini Square",
+        fontSize: 70,
+        color: "#7d6e31",
+        align: "center",
+        wordWrap: { width: 700, useAdvancedWrap: true },
+        fontStyle: "bold",
+      }
+    );
 
-    this.player = this.physics.add.image(position(2, 1, "w"), position(2, 1, "h"), 'player');
+    this.player = this.physics.add.image(
+      position(2, 1, "w"),
+      position(2, 1, "h"),
+      "player"
+    );
 
     this.player.body.setSize(this.player.height * 0.9, this.player.width * 1);
     this.player.setCollideWorldBounds(true);
@@ -85,7 +103,7 @@ export class BookFight extends Scene {
 
     this.projectiles = this.physics.add.group();
 
-    this.physics.add.overlap( 
+    this.physics.add.overlap(
       this.player,
       this.projectiles,
       this.hitProjectile as Types.Physics.Arcade.ArcadePhysicsCallback,
@@ -98,7 +116,7 @@ export class BookFight extends Scene {
       delay: 2000,
       callback: this.spawnProjectile,
       callbackScope: this,
-      loop: true
+      loop: true,
     });
   }
 
@@ -119,7 +137,11 @@ export class BookFight extends Scene {
   }
 
   spawnProjectile() {
-    const projectile = this.projectiles.create(this.player.x, 0, 'projectile') as Types.Physics.Arcade.ImageWithDynamicBody;
+    const projectile = this.projectiles.create(
+      this.player.x,
+      0,
+      "projectile"
+    ) as Types.Physics.Arcade.ImageWithDynamicBody;
     projectile.setScale(0.12, 0.15);
     projectile.setAngle(90);
     projectile.refreshBody();
@@ -133,18 +155,18 @@ export class BookFight extends Scene {
     );
 
     const speed = 100;
-    projectile.setVelocity(
-      Math.cos(angle) * speed,
-      Math.sin(angle) * speed
-    );
+    projectile.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
   }
 
-  hitProjectile(player: GameObjects.GameObject, projectile: GameObjects.GameObject) {
-    const sfx = this.sound.add('sfx')
-    sfx.play()
-    this.lives--
+  hitProjectile(
+    player: GameObjects.GameObject,
+    projectile: GameObjects.GameObject
+  ) {
+    const sfx = this.sound.add("sfx");
+    sfx.play();
+    this.lives--;
 
-    this.lives_text.setText(this.lifeText[this.lives-1])
+    this.lives_text.setText(this.lifeText[this.lives - 1]);
 
     projectile.destroy();
   }
