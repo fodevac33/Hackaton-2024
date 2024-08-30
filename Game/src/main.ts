@@ -8,12 +8,17 @@ import { Map } from "./scenes/Map";
 
 import { Game, Types } from "phaser";
 
+export const resolution ={
+  width: 1024,
+  height: 768
+}
+
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config: Types.Core.GameConfig = {
   type: Phaser.AUTO,
-  width: 1024,
-  height: 768,
+  width: resolution.width,
+  height: resolution.height,
   parent: "game-container",
   backgroundColor: "#028af8",
   scale: {

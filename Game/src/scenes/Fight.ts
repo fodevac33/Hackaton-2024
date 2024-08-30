@@ -1,5 +1,5 @@
 import { GameObjects, Types } from "phaser";
-
+import { resolution } from "../main";
 import { Scene } from "phaser";
 
 export class Fight extends Scene
