@@ -17,7 +17,7 @@ export class MainMenu extends Scene {
     this.buttonPlay = this.add.image(512, 500, "buttonPlay");
 
     this.input.once("pointerdown", () => {
-      this.scene.start("DictFight");
+      this.scene.start("MathFight");
     });
   }
 }
