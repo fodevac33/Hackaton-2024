@@ -13,6 +13,30 @@ export const resolution ={
   height: 768
 }
 
+export const position = (divisions: number, place: number, dim: string) => {
+  if (place > divisions) {
+   throw Error("Place must be lesser or equal than divisions")
+  }
+
+  let side: number
+
+  if (dim == "w") {
+    side = resolution.width
+  } else if (dim == "h") {
+    side = resolution.height
+  } else {
+    throw Error("Non existent dimension")
+  }
+
+  const chunk = side / divisions
+
+  if (dim == "w") {
+    return chunk * place
+  }
+
+  return chunk * (divisions - place)
+}
+
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config: Types.Core.GameConfig = {
@@ -25,10 +49,12 @@ const config: Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
+  pixelArt: true,
   physics: {
     default: "arcade",
     arcade: {
       gravity: { x: 0, y: 0 },
+      debug: true
     },
   },
 
