@@ -1,12 +1,13 @@
 import { Boot } from "./scenes/Boot";
 import { Intro } from "./scenes/Intro";
-import { Fight } from "./scenes/Fight"
+import { BookFight } from "./scenes/BookFight"
 import { GameOver } from "./scenes/GameOver";
 import { MainMenu } from "./scenes/MainMenu";
 import { Preloader } from "./scenes/Preloader";
 import { Map } from "./scenes/Map";
 
 import { Game, Types } from "phaser";
+import { DictFight } from "./scenes/DictFight";
 
 export const resolution ={
   width: 1024,
@@ -54,10 +55,11 @@ const config: Types.Core.GameConfig = {
     default: "arcade",
     arcade: {
       gravity: { x: 0, y: 0 },
+      debug: true
     },
   },
 
-  scene: [Boot, Preloader, MainMenu, Intro, GameOver, Map, Fight],
+  scene: [Boot, Preloader, MainMenu, Intro, GameOver, Map, BookFight, DictFight],
 };
 
 export default new Game(config);

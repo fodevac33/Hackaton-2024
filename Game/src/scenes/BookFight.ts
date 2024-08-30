@@ -2,7 +2,7 @@ import { GameObjects, Types, Physics, Actions } from "phaser";
 import { Scene } from "phaser";
 import { position } from "../main";
 
-export class Fight extends Scene {
+export class BookFight extends Scene {
   background: GameObjects.Image;
   title: GameObjects.Image;
   lives_text: GameObjects.Text;
@@ -14,7 +14,7 @@ export class Fight extends Scene {
   lifeText: string[]
 
   constructor() {
-    super("Fight");
+    super("BookFight");
   }
 
   preload() {
@@ -26,8 +26,7 @@ export class Fight extends Scene {
     this.load.image('shakespire', 'image/shakespire.png');
     this.load.image('wall', 'image/wall.jpg');
     this.load.image('title', 'image/title.png');
-    this.load.image('fighter', 'https://labs.phaser.io/assets/sprites/mushroom.png');
-    this.load.image('projectile', 'image/proyectile.png');
+    this.load.image('projectile', 'image/projectile.png');
   }
 
   create() {
@@ -78,7 +77,9 @@ export class Fight extends Scene {
       fontStyle: "bold",
     });
 
-    this.player = this.physics.add.image(position(2, 1, "w"), position(2, 1, "h"), 'fighter');
+    this.player = this.physics.add.image(position(2, 1, "w"), position(2, 1, "h"), 'player');
+
+    this.player.body.setSize(this.player.height * 0.9, this.player.width * 1);
     this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, this.wall);
 
