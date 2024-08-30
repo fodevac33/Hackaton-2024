@@ -120,7 +120,8 @@ export class Map extends Scene {
           !worldLayer.getTileAtWorldXY(x, y) ||
           !worldLayer.getTileAtWorldXY(x, y).collides
         ) {
-          const teraflop = this.physics.add.image(x, y, "teraflopTexture");
+          const teraflop = this.physics.add.image(x, y, "gpu");
+          teraflop.setScale(0.035);
           teraflop.setInteractive();
           teraflops.add(teraflop);
           count++;
