@@ -12,6 +12,7 @@ export class Fight extends Scene {
   projectile: Types.Physics.Arcade.ImageWithDynamicBody;
   angle: number
   lives: number = 3
+  lifeText: string[]
 
   constructor() {
     super("Fight");
@@ -19,7 +20,7 @@ export class Fight extends Scene {
 
   preload() {
     this.load.setPath("assets/book_fight");
-    
+
     this.load.audio('bach', 'audio/bach_cantata.mp3');
     this.load.audio('sfx', 'audio/sfx.wav');
 
@@ -32,6 +33,10 @@ export class Fight extends Scene {
 
   create() {
     const music = this.sound.add('bach');
+    music.play('', {
+      volume: 0.7
+    });
+
     if (this.input.keyboard?.createCursorKeys()) {
       this.cursors = this.input.keyboard.createCursorKeys();
     }
@@ -59,8 +64,14 @@ export class Fight extends Scene {
     );
     this.wall.refresh();
 
+    this.lifeText = [
+      "Vidas I",
+      "Vidas I I",
+      "Vidas I I I"
+    ]
 
-    this.lives_text = this.add.text(position(25, 1, "w"), position(18, 3, "h"), "Vidas I I I", {
+
+    this.lives_text = this.add.text(position(25, 1, "w"), position(18, 3, "h"), this.lifeText[this.lives-1], {
       fontFamily: "Kenney Mini Square",
       fontSize: 70,
       color: "#7d6e31",
@@ -94,7 +105,6 @@ export class Fight extends Scene {
       this
     );
 
-    music.play();
   }
 
   update() {
@@ -125,9 +135,13 @@ export class Fight extends Scene {
     );
   }
 
-  hitProjectile(player: Phaser.GameObjects.GameObject, projectile: Phaser.GameObjects.GameObject) {
-    projectile.destroy();
+  hitProjectile(player: GameObjects.GameObject, projectile: GameObjects.GameObject) {
+    const sfx = this.sound.add('sfx')
+    sfx.play()
     this.lives--
-    console.log("Player hit!");
+
+    this.lives_text.setText(this.lifeText[this.lives-1])
+
+    projectile.destroy();
   }
 }
