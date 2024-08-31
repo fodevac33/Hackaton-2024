@@ -22,7 +22,7 @@ export class BookFight extends Scene {
     this.cameras.main.fadeIn(3000);
     this.load.setPath("assets/book_fight");
 
-    this.load.audio("bach", "audio/bach_cantata.mp3");
+    this.load.audio("bach", "audio/bach_fugue.mp3");
     this.load.audio("sfx", "audio/sfx.wav");
 
     this.load.image("shakespire", "image/shakespire.png");
