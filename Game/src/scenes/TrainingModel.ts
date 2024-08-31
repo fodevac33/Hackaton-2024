@@ -98,7 +98,7 @@ export class TrainingModel extends Scene {
       const msg_text = this.add.text(
         resolution.width / 2,
         resolution.height / 2 - 60,
-        "Training model with the new data...",
+        "Entrenando modelo con nuevos datos...",
         {
           fontFamily: "Kenney Mini Square",
           fontSize: 30,
