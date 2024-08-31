@@ -1,6 +1,7 @@
 import { Boot } from "./scenes/Boot";
 import { Intro } from "./scenes/Intro";
 import { BookFight } from "./scenes/BookFight";
+import { ProgramFight } from "./scenes/ProgramFight";
 import { GameOver } from "./scenes/GameOver";
 import { MainMenu } from "./scenes/MainMenu";
 import { Preloader } from "./scenes/Preloader";
@@ -98,6 +99,7 @@ const config: Types.Core.GameConfig = {
     MathFight,
     Info,
     Model,
+    ProgramFight,
   ],
 };
 
