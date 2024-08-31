@@ -17,6 +17,7 @@ export class MathFight extends Scene {
   timeLeft: number = 10; // 60 seconds countdown
   timerEvent: Phaser.Time.TimerEvent;
   music: Sound.NoAudioSound | Sound.HTML5AudioSound | Sound.WebAudioSound
+  
   constructor() {
     super("MathFight");
   }
