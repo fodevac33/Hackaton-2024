@@ -34,6 +34,9 @@ export class Preloader extends Scene {
       },
     });
 
+
+    this.load.audio('sfx', 'sfx.wav');
+
     this.load.image("hearth", "hearth.png");
 
     this.load.image("logo", "logo.png");

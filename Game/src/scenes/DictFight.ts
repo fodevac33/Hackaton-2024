@@ -26,17 +26,16 @@ export class DictFight extends Scene {
   preload() {
     this.load.setPath("assets/dict_fight");
 
-    this.load.audio('music', 'audio/boring.mp3');
-    this.load.audio('sfx', 'audio/sfx.wav');
+    this.load.audio('music_dict', 'audio/boring.mp3');
 
-    this.load.image('background_', 'image/background.jpg');
-    this.load.image('wall', 'image/wall.png');
-    this.load.image('title', 'image/title.png');
-    this.load.image('projectile', 'image/projectile.png');
-  }
+    this.load.image('background_dict', 'image/background.jpg');
+    this.load.image('wall_dict', 'image/wall.png');
+    this.load.image('title_dict', 'image/title.png');
+    this.load.image('projectile_dict', 'image/projectile.png');
+}
 
   create() {
-    this.music = this.sound.add('music');
+    this.music = this.sound.add('music_dict');
 
     this.music.play('', {
       volume: 0.7
@@ -46,15 +45,15 @@ export class DictFight extends Scene {
       this.cursors = this.input.keyboard.createCursorKeys();
     }
 
-    this.background = this.add.image(position(2, 1, "w"), position(2, 1, "h"), "background_");
+    this.background = this.add.image(position(2, 1, "w"), position(2, 1, "h"), "background_dict");
     // this.background.setScale(0.8, 0.7);
 
-    this.title = this.add.image(position(2, 1, "w"), position(8, 7, "h"), "title");
+    this.title = this.add.image(position(2, 1, "w"), position(8, 7, "h"), "title_dict");
 
     this.wall = this.physics.add.staticGroup();
     const scale = 0.2;
     for (let i = 0; i < 40; i++) {
-      const wallObject = this.wall.create(0, 0, 'wall') as Phaser.Physics.Arcade.Image;
+      const wallObject = this.wall.create(0, 0, 'wall_dict') as Phaser.Physics.Arcade.Image;
       wallObject.setScale(scale);
       wallObject.refreshBody();
       wallObject.body?.setSize(wallObject.height * 0.1, wallObject.width * 0.1)
@@ -152,7 +151,7 @@ export class DictFight extends Scene {
   }
 
   spawnProjectile() {
-    const projectile = this.projectiles.create(this.player.x, 0, 'projectile') as Types.Physics.Arcade.ImageWithDynamicBody;
+    const projectile = this.projectiles.create(this.player.x, 0, 'projectile_dict') as Types.Physics.Arcade.ImageWithDynamicBody;
     projectile.setScale(0.12, 0.15);
     projectile.setAngle(90);
     projectile.refreshBody();

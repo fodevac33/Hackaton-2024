@@ -26,17 +26,16 @@ export class MathFight extends Scene {
     this.background;
     this.load.setPath("assets/math_fight");
 
-    this.load.audio("music", "audio/math.mp3");
-    this.load.audio("sfx", "audio/sfx.wav");
+    this.load.audio("music_math", "audio/math.mp3");
 
-    this.load.image("back", "image/background.png");
-    this.load.image("wall", "image/wall.png");
-    this.load.image("title", "image/title.png");
-    this.load.image("projectile", "image/projectile.png");
-  }
+    this.load.image("back_math", "image/background.png");
+    this.load.image("wall_math", "image/wall.png");
+    this.load.image("title_math", "image/title.png");
+    this.load.image("projectile_math", "image/projectile.png");
+}
 
   create() {
-    this.music = this.sound.add("music");
+    this.music = this.sound.add("music_math");
 
     this.music.play("", {
       volume: 0.7,
@@ -49,14 +48,14 @@ export class MathFight extends Scene {
     this.background = this.add.image(
       position(2, 1, "w"),
       position(2, 1, "h"),
-      "back"
+      "back_math"
     );
     this.background.setScale(0.2, 0.4);
 
     this.title = this.add.image(
       position(2, 1, "w"),
       position(8, 7, "h"),
-      "title"
+      "title_math"
     );
 
     this.wall = this.physics.add.staticGroup();
@@ -65,7 +64,7 @@ export class MathFight extends Scene {
       const wallObject = this.wall.create(
         0,
         0,
-        "wall"
+        "wall_math"
       ) as Phaser.Physics.Arcade.Image;
       wallObject.setScale(scale);
       wallObject.refreshBody();
@@ -157,7 +156,7 @@ export class MathFight extends Scene {
       callbackScope: this,
       loop: true,
     });
-  }
+}
 
   update() {
     this.player.setVelocity(0);
@@ -179,7 +178,7 @@ export class MathFight extends Scene {
     const projectile = this.projectiles.create(
       this.player.x,
       0,
-      "projectile"
+      "projectile_math"
     ) as Types.Physics.Arcade.ImageWithDynamicBody;
     projectile.setScale(0.12, 0.15);
     projectile.refreshBody();

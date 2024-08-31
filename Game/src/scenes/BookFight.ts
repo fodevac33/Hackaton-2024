@@ -27,17 +27,16 @@ export class BookFight extends Scene {
     this.cameras.main.fadeIn(3000);
     this.load.setPath("assets/book_fight");
 
-    this.load.audio("bach", "audio/bach_fugue.mp3");
-    this.load.audio("sfx", "audio/sfx.wav");
+    this.load.audio("bach_book", "audio/bach_fugue.mp3");
 
-    this.load.image("shakespire", "image/shakespire.png");
-    this.load.image("wall", "image/wall.jpg");
-    this.load.image("title", "image/title.png");
-    this.load.image("projectile", "image/projectile.png");
-  }
+    this.load.image("shakespire_book", "image/shakespire.png");
+    this.load.image("wall_book", "image/wall.jpg");
+    this.load.image("title_book", "image/title.png");
+    this.load.image("projectile_book", "image/projectile.png");
+}
 
   create() {
-    this.music = this.sound.add("bach");
+    this.music = this.sound.add("bach_book");
     this.music.play("", {
       volume: 0.7,
       detune: 0,
@@ -50,14 +49,14 @@ export class BookFight extends Scene {
     this.background = this.add.image(
       position(2, 1, "w"),
       position(2, 1, "h"),
-      "shakespire"
+      "shakespire_book"
     );
     this.background.setScale(0.8, 0.7);
 
     this.title = this.add.image(
       position(2, 1, "w"),
       position(8, 7, "h"),
-      "title"
+      "title_book"
     );
 
     this.wall = this.physics.add.staticGroup();
@@ -66,7 +65,7 @@ export class BookFight extends Scene {
       const wallObject = this.wall.create(
         0,
         0,
-        "wall"
+        "wall_book"
       ) as Phaser.Physics.Arcade.Image;
       wallObject.setScale(scale);
       wallObject.refreshBody();
@@ -180,7 +179,7 @@ export class BookFight extends Scene {
     const projectile = this.projectiles.create(
       this.player.x,
       0,
-      "projectile"
+      "projectile_book"
     ) as Types.Physics.Arcade.ImageWithDynamicBody;
     projectile.setScale(0.12, 0.15);
     projectile.setAngle(90);
