@@ -253,6 +253,9 @@ export class DictFight extends Scene {
   }
 
   endGame(message: string) {
+    this.lives = 3
+    this.heartImages = []
+
     this.music.stop();
     this.timerEvent.remove();
     this.physics.pause();
