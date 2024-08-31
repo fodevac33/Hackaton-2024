@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import { globalData, resolution } from "../main";
+import { glob } from "fs";
 
 export class Map extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
@@ -40,14 +41,14 @@ export class Map extends Scene {
         x: 670,
         y: 270,
         scale: 0.04,
-        owned: globalData.arenasVisited.arena2.owned,
+        owned: globalData.arenasVisited.arena1.owned,
       },
       {
         name: "books",
         x: 640,
         y: 270,
         scale: 0.07,
-        owned: globalData.arenasVisited.arena1.owned,
+        owned: globalData.arenasVisited.arena2.owned,
       },
       {
         name: "calculator",
@@ -61,14 +62,14 @@ export class Map extends Scene {
         x: 580,
         y: 270,
         scale: 0.03,
-        owned: globalData.arenasVisited.arena4.owned,
+        owned: globalData.arenasVisited.arena5.owned,
       },
       {
         name: "keyboard",
         x: 540,
         y: 270,
         scale: 0.04,
-        owned: globalData.arenasVisited.arena5.owned,
+        owned: globalData.arenasVisited.arena4.owned,
       },
     ];
 
@@ -211,7 +212,10 @@ export class Map extends Scene {
             "name"
           ) as keyof typeof globalData.arenasVisited;
 
-          if (!globalData.arenasVisited[arenaName].owned) {
+          if (
+            !globalData.arenasVisited[arenaName].owned &&
+            globalData.arenasVisited[arenaName].allowed
+          ) {
             const nextScene = globalData.arenasVisited[arenaName].scene;
             this.score.setText(globalData.teraflops.toString());
             this.scene.start(nextScene);
@@ -271,7 +275,7 @@ export class Map extends Scene {
     this.physics.add.overlap(this.player, this.modelZone, () => {
       globalData.spawnPoint = { x: this.player.x, y: this.player.y };
       this.score.setText(globalData.teraflops.toString());
-      this.scene.start("Model");
+      this.scene.start("TrainingModel");
     });
 
     //------------------------------/SE AGREGA MODEL EN EL INICIO---------------------------------//

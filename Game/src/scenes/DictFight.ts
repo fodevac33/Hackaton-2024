@@ -14,7 +14,7 @@ export class DictFight extends Scene {
   projectiles: Physics.Arcade.Group;
   lives: number = 3;
   heartImages: GameObjects.Image[] = [];
-  timeLeft: number = 20; // 60 seconds countdown
+  timeLeft: number = 15; // 60 seconds countdown
   timerEvent: Phaser.Time.TimerEvent;
   music: Sound.NoAudioSound | Sound.HTML5AudioSound | Sound.WebAudioSound;
 
@@ -234,8 +234,9 @@ export class DictFight extends Scene {
     this.timer_text.setText(`Tiempo: ${this.timeLeft}`);
 
     if (this.timeLeft <= 0) {
-      globalData.arenasVisited.arena2.owned = true;
+      globalData.arenasVisited.arena1.owned = true;
       globalData.newData = true;
+      globalData.arenasVisited.arena2.allowed = true;
       globalData.modelLevel += 1;
       this.endGame("Ganaste!");
     }
@@ -263,7 +264,7 @@ export class DictFight extends Scene {
   endGame(message: string) {
     this.lives = 3;
     this.heartImages = [];
-    this.timeLeft = 20;
+    this.timeLeft = 15;
 
     this.music.stop();
     this.timerEvent.remove();

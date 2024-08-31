@@ -238,7 +238,8 @@ export class BookFight extends Scene {
     this.timer_text.setText(`Tiempo: ${this.timeLeft}`);
 
     if (this.timeLeft <= 0) {
-      globalData.arenasVisited.arena1.owned = true;
+      globalData.arenasVisited.arena2.owned = true;
+      globalData.arenasVisited.arena3.allowed = true;
       globalData.newData = true;
       globalData.modelLevel += 1;
       this.endGame("Ganaste!");

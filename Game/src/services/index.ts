@@ -1,4 +1,5 @@
 import axios from "axios";
+import { globalData } from "../main";
 
 interface Response {
   message: string;
@@ -7,7 +8,7 @@ interface Response {
 async function sendPrompt(message: string, digit: number): Promise<Response> {
   const options = {
     method: "POST",
-    url: `https://api-hackaton-2024.onrender.com/level/${digit}`,
+    url: `https://api-hackaton-2024.onrender.com/level/${globalData.modelLevel}`,
     data: {
       prompt: message,
     },
@@ -19,6 +20,7 @@ async function sendPrompt(message: string, digit: number): Promise<Response> {
   console.log("Sending request with options:", options);
   try {
     const response = await axios.request<Response>(options);
+    console.log(response.data);
     return response.data; // Return the response from the server
   } catch (error) {
     console.error(error);

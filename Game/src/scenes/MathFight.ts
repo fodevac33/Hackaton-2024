@@ -253,6 +253,7 @@ export class MathFight extends Scene {
 
     if (this.timeLeft <= 0) {
       globalData.arenasVisited.arena3.owned = true;
+      globalData.arenasVisited.arena4.allowed = true;
       globalData.newData = true;
       globalData.modelLevel += 1;
       this.endGame("Ganaste!");

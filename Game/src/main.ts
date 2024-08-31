@@ -28,27 +28,32 @@ export const globalData = {
     x: 0,
     y: 0,
   },
-  modelLevel: 1,
+  modelLevel: 0,
   arenasVisited: {
     arena1: {
-      scene: "BookFight",
-      owned: false,
-    },
-    arena2: {
       scene: "DictFight",
       owned: false,
+      allowed: true,
+    },
+    arena2: {
+      scene: "BookFight",
+      owned: false,
+      allowed: false,
     },
     arena3: {
       scene: "MathFight",
       owned: false,
+      allowed: false,
     },
     arena4: {
-      scene: "InternetFight",
-      owned: false,
-    },
-    arena5: {
       scene: "ProgramFight",
       owned: false,
+      allowed: false,
+    },
+    arena5: {
+      scene: "InternetFight",
+      owned: false,
+      allowed: false,
     },
   },
   newData: false,

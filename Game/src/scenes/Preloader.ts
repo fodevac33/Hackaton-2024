@@ -67,6 +67,9 @@ export class Preloader extends Scene {
     this.load.image("keyboard", "/program_fight/image/projectile.png");
     this.load.image("router", "/internet_fight/image/projectile.png");
 
+    this.load.image("plane", "paper_plane.png");
+    this.load.image("x", "x.png");
+
     this.load.tilemapTiledJSON("map", "/tilemaps/AI_Land.json");
     this.load.atlas("player", "/player/atlas.png", "/player/atlas.json");
   }
@@ -76,6 +79,6 @@ export class Preloader extends Scene {
     //  For example, you can define global animations here, so we can use them in other scenes.
 
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.scene.start("Model");
+    this.scene.start("Intro");
   }
 }

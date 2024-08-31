@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 import sendPrompt from "../services/index";
+import { resolution } from "../main";
 export class Model extends Scene {
   chatHistory = [];
   chatContainer;
@@ -10,6 +11,7 @@ export class Model extends Scene {
   msg_text: Phaser.GameObjects.Text;
   cloud: Phaser.GameObjects.Image;
   button: Phaser.GameObjects.Image;
+  button2: Phaser.GameObjects.Image;
   offsetY = 0;
   maxOffsetY = 0;
   lines = [];
@@ -77,8 +79,9 @@ export class Model extends Scene {
       }
     });
 
-    this.button = this.add.image(880, 710, "button").setInteractive();
-    this.button.setScale(1.5);
+    this.button = this.add.image(895, 710, "plane").setInteractive();
+    this.button.setScale(0.035);
+
     this.button.on("pointerdown", () => {
       const inputContent = inputText.text;
       inputText.setText("");
@@ -86,6 +89,14 @@ export class Model extends Scene {
       if (inputContent !== "" && this.offsetY <= 600) {
         this.handleUserInput(inputContent);
       }
+    });
+
+    this.button2 = this.add
+      .image(resolution.width - 40, 40, "x")
+      .setInteractive();
+    this.button2.setScale(0.2);
+    this.button2.on("pointerdown", () => {
+      this.scene.start("Map");
     });
 
     //---------------------API-----------------------//

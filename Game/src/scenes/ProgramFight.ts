@@ -259,7 +259,8 @@ export class ProgramFight extends Scene {
     this.timer_text.setText(`Tiempo: ${this.timeLeft}`);
 
     if (this.timeLeft <= 0) {
-      globalData.arenasVisited.arena5.owned = true;
+      globalData.arenasVisited.arena4.owned = true;
+      globalData.arenasVisited.arena5.allowed = true;
       globalData.newData = true;
       globalData.modelLevel += 1;
       this.endGame("Ganaste!");

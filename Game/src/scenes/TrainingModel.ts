@@ -47,8 +47,32 @@ export class TrainingModel extends Scene {
     if (teraflops < modelLevel * 2) {
       const msg_text = this.add.text(
         resolution.width / 2,
-        resolution.height / 2 - 60,
-        "You dont have enough teraflops :(",
+        resolution.height / 2 - 0,
+        "No tienes suficientes teraflops :(",
+        {
+          fontFamily: "Kenney Mini Square",
+          fontSize: 30,
+          color: "#fff   ",
+          align: "center",
+          fontStyle: "bold",
+        }
+      );
+      msg_text.setOrigin(0.5);
+      msg_text.setScale(1);
+
+      this.time.delayedCall(
+        2000,
+        () => {
+          this.scene.start("Map");
+        },
+        [],
+        this
+      );
+    } else if (modelLevel == 0) {
+      const msg_text = this.add.text(
+        resolution.width / 2,
+        resolution.height / 2 - 0,
+        "No tienes datos para entrenar el modelo",
         {
           fontFamily: "Kenney Mini Square",
           fontSize: 30,
@@ -70,34 +94,34 @@ export class TrainingModel extends Scene {
       );
     } else {
       globalData.teraflops = globalData.teraflops - modelLevel * 2;
+
+      const msg_text = this.add.text(
+        resolution.width / 2,
+        resolution.height / 2 - 60,
+        "Training model with the new data...",
+        {
+          fontFamily: "Kenney Mini Square",
+          fontSize: 30,
+          color: "#fff   ",
+          align: "center",
+          fontStyle: "bold",
+        }
+      );
+      msg_text.setOrigin(0.5);
+      msg_text.setScale(1);
+
+      this.progressBarBg = this.add
+        .rectangle(resolution.width / 2, resolution.height / 2, 468, 32)
+        .setStrokeStyle(1, 0xffffff);
+      this.progressBar = this.add.rectangle(
+        resolution.width / 2 - 230,
+        resolution.height / 2,
+        4,
+        28,
+        0xffffff
+      );
+
+      this.startCustomProgress();
     }
-
-    const msg_text = this.add.text(
-      resolution.width / 2,
-      resolution.height / 2 - 60,
-      "Training model with the new data...",
-      {
-        fontFamily: "Kenney Mini Square",
-        fontSize: 30,
-        color: "#fff   ",
-        align: "center",
-        fontStyle: "bold",
-      }
-    );
-    msg_text.setOrigin(0.5);
-    msg_text.setScale(1);
-
-    this.progressBarBg = this.add
-      .rectangle(resolution.width / 2, resolution.height / 2, 468, 32)
-      .setStrokeStyle(1, 0xffffff);
-    this.progressBar = this.add.rectangle(
-      resolution.width / 2 - 230,
-      resolution.height / 2,
-      4,
-      28,
-      0xffffff
-    );
-
-    this.startCustomProgress();
   }
 }
