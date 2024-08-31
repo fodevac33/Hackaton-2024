@@ -8,6 +8,7 @@ import { Map } from "./scenes/Map";
 import { MathFight } from "./scenes/MathFight";
 import { Model } from "./scenes/Model";
 import { Info } from "./scenes/Info";
+import { TrainingModel } from "./scenes/TrainingModel";
 
 import { Game, Types } from "phaser";
 import { DictFight } from "./scenes/DictFight";
@@ -39,6 +40,7 @@ export const globalData = {
       owned: false,
     },
   },
+  newData: false,
 };
 
 export const position = (divisions: number, place: number, dim: string) => {
@@ -72,7 +74,7 @@ const config: Types.Core.GameConfig = {
   width: resolution.width,
   height: resolution.height,
   parent: "game-container",
-  backgroundColor: "#028af8",
+  backgroundColor: "#000",
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -97,6 +99,7 @@ const config: Types.Core.GameConfig = {
     DictFight,
     MathFight,
     Info,
+    TrainingModel,
     Model,
   ],
 };

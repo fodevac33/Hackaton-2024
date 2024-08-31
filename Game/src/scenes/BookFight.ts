@@ -207,6 +207,7 @@ export class BookFight extends Scene {
 
     if (this.timeLeft <= 0) {
       globalData.arenasVisited.arena1.owned = true;
+      globalData.newData = true;
       this.endGame("Ganaste!");
     }
   }

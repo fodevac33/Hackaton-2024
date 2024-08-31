@@ -203,6 +203,7 @@ export class DictFight extends Scene {
 
     if (this.timeLeft <= 0) {
       globalData.arenasVisited.arena2.owned = true;
+      globalData.newData = true;
       this.endGame("Ganaste!");
     }
   }

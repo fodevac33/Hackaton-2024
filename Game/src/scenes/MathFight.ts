@@ -32,7 +32,7 @@ export class MathFight extends Scene {
     this.load.image("wall_math", "image/wall.png");
     this.load.image("title_math", "image/title.png");
     this.load.image("projectile_math", "image/projectile.png");
-}
+  }
 
   create() {
     this.music = this.sound.add("music_math");
@@ -156,7 +156,7 @@ export class MathFight extends Scene {
       callbackScope: this,
       loop: true,
     });
-}
+  }
 
   update() {
     this.player.setVelocity(0);
@@ -222,6 +222,7 @@ export class MathFight extends Scene {
 
     if (this.timeLeft <= 0) {
       globalData.arenasVisited.arena3.owned = true;
+      globalData.newData = true;
       this.endGame("Ganaste!");
     }
   }
