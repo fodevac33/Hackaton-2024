@@ -94,6 +94,7 @@ export class TrainingModel extends Scene {
       );
     } else {
       globalData.teraflops = globalData.teraflops - modelLevel * 2;
+      globalData.newData = false;
 
       const msg_text = this.add.text(
         resolution.width / 2,
