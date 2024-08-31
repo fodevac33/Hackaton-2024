@@ -12,6 +12,7 @@ import { Model } from "./scenes/Model";
 import { Info } from "./scenes/Info";
 import { TrainingModel } from "./scenes/TrainingModel";
 
+import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 import { Game, Types } from "phaser";
 import { DictFight } from "./scenes/DictFight";
 
@@ -97,6 +98,9 @@ const config: Types.Core.GameConfig = {
       debug: false,
     },
   },
+  dom: {
+    createContainer: true,
+  },
 
   scene: [
     Boot,
@@ -114,6 +118,15 @@ const config: Types.Core.GameConfig = {
     ProgramFight,
     InternetFight,
   ],
+  plugins: {
+    scene: [
+      {
+        key: "rexUI",
+        plugin: RexUIPlugin,
+        mapping: "rexUI",
+      },
+    ],
+  },
 };
 
 export default new Game(config);

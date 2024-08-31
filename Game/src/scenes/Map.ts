@@ -161,13 +161,6 @@ export class Map extends Scene {
 
     // To check if collisions works
 
-    // const debugGraphics = this.add.graphics().setAlpha(0.75);
-    // worldLayer.renderDebug(debugGraphics, {
-    //   tileColor: null, // Color of non-colliding tiles
-    //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-    //   faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-    // });
-
     const spawnLayer = map.getObjectLayer("Spawn Point");
     const spawnPoint = spawnLayer?.objects.find(
       (obj) => obj.name === "" // Find the object with an empty name
@@ -191,6 +184,8 @@ export class Map extends Scene {
     } else {
       setSpawnPoint(globalData.spawnPoint.x, globalData.spawnPoint.y);
     }
+
+    //--------------------------------LOGICA FIGHT---------------------------------//
 
     const arenasLayer = map.getObjectLayer("Arenas");
 
@@ -224,7 +219,9 @@ export class Map extends Scene {
         }
       });
     }
-
+    //--------------------------------/LOGICA FIGHT---------------------------------//
+    //--------------------------------LOGICA HOME---------------------------------//
+    // const modelHome = map.getObjectLayer("Model");
     //-----------------------------SE AGREGA TERAFLOPS EN EL MAPA---------------------------//
     const teraflopLayer = map.getObjectLayer("Teraflops");
     if (teraflopLayer) {
@@ -263,30 +260,19 @@ export class Map extends Scene {
     //------------------------------SE AGREGA MODEL EN EL INICIO---------------------------------//
     const modelHome = map.getObjectLayer("Model")["objects"][0];
     this.modelZone = this.add.zone(
-      modelHome?.x,
-      modelHome?.y,
-      modelHome?.width,
-      modelHome?.height
+      modelHome?.x + modelHome.width / 2,
+      modelHome?.y + modelHome.height / 2,
+      modelHome?.width - 40,
+      modelHome?.height - 60
     );
     this.physics.world.enable(this.modelZone);
     this.modelZone.body.setAllowGravity(false);
-    this.modelZone.body.moves = false;
-    if (this.modelZone) {
-      console.log(
-        "Building x:",
-        this.modelZone.x,
-        "Building y:",
-        this.modelZone.y
-      );
-    }
     // In the create method, add an overlap collider
-    this.physics.add.overlap(
-      this.player,
-      this.modelZone,
-      this.triggerFightScene,
-      null,
-      this
-    );
+    this.physics.add.overlap(this.player, this.modelZone, () => {
+      globalData.spawnPoint = { x: this.player.x, y: this.player.y };
+      this.score.setText(globalData.teraflops.toString());
+      this.scene.start("Model");
+    });
 
     //------------------------------/SE AGREGA MODEL EN EL INICIO---------------------------------//
 
@@ -364,23 +350,9 @@ export class Map extends Scene {
     this.camera.startFollow(this.player);
     this.camera.setBackgroundColor(0x00ff00);
   }
-  triggerFightScene() {
-    // Switch to the FightScene
-    console.log("cambio"); // Make sure 'FightScene' is the key of your fight scene
-  }
 
   update(time: number, delta: number): void {
     this.controls.update(delta);
-    const proximityThreshold = 10;
-    const distance = Phaser.Math.Distance.Between(
-      this.player.x,
-      this.player.y,
-      this.modelZone.x,
-      this.modelZone.y
-    );
-    if (distance < proximityThreshold && !this.fightTriggered) {
-      this.triggerFightScene();
-    }
     const speed = 175;
 
     this.player.body.setVelocity(0);
@@ -394,7 +366,7 @@ export class Map extends Scene {
 
     // Vertical movement
     if (this.cursor.up.isDown) {
-      this.player.body.setVelocityY(-100);
+      this.player.body.setVelocityY(-1);
     } else if (this.cursor.down.isDown) {
       this.player.body.setVelocityY(100);
     }

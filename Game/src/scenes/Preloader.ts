@@ -46,6 +46,7 @@ export class Preloader extends Scene {
     // this.load.image("backgroundCity", "backgroundCity.png");
     this.load.image("cloudSpeech", "cloudSpeech.png");
     this.load.image("gpu", "gpu.png");
+    this.load.image("chat", "large_chat.png");
 
     this.load.spritesheet("animatedBackground", "backgroundCity2.png", {
       frameWidth: 1024,
@@ -75,6 +76,6 @@ export class Preloader extends Scene {
     //  For example, you can define global animations here, so we can use them in other scenes.
 
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.scene.start("MainMenu");
+    this.scene.start("Model");
   }
 }
