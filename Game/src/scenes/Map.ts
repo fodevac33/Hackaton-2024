@@ -68,7 +68,7 @@ export class Map extends Scene {
       (this as Record<string, any>)[data.name] = image;
 
       if (!data.owned) {
-        image.setAlpha(0.5);
+        image.setAlpha(0.3);
       }
     });
 

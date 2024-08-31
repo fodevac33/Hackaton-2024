@@ -31,11 +31,11 @@ export class Info extends Scene {
     });
 
     const coolData = [
-      "Sabias que Los modelos de lenguaje grande, como GPT-4, están entrenados en vastas cantidades de texto de internet y otras fuentes para generar respuestas coherentes y contextualmente relevantes.",
-      "Sabias que los LLMs pueden realizar tareas de procesamiento de lenguaje natural como traducción, resumen de texto, análisis de sentimientos y generación de texto creativo.",
-      "Sabias que a medida que los modelos de lenguaje grande se hacen más grandes y complejos, requieren cantidades significativas de potencia computacional y recursos para su entrenamiento y funcionamiento.",
-      "Sabias que los LLMs han demostrado la capacidad de realizar razonamiento matemático básico y lógica deductiva, aunque su rendimiento puede variar dependiendo de la tarea específica.",
-      "Sabias que el uso de LLMs ha planteado preocupaciones éticas sobre el sesgo en los datos de entrenamiento, la privacidad y el uso potencial para desinformación o actividades malintencionadas.",
+      "Sabias que? Los modelos de lenguaje, como GPT-4, están entrenados en vastas cantidades de texto de internet y otras fuentes para generar respuestas coherentes y contextualmente relevantes.",
+      "Sabias que? Los LLMs pueden realizar tareas de procesamiento de lenguaje natural como traducción, resumen de texto, análisis de sentimientos y generación de texto creativo.",
+      "Sabias que? A medida que los modelos de lenguaje se hacen más grandes y complejos, requieren cantidades significativas de potencia computacional y recursos para su entrenamiento y funcionamiento.",
+      "Sabias que? Los LLMs han demostrado la capacidad de realizar razonamiento matemático básico y lógica deductiva, aunque su rendimiento puede variar dependiendo de la tarea específica.",
+      "Sabias que? El uso de LLMs ha planteado preocupaciones éticas sobre el sesgo en los datos de entrenamiento, la privacidad y el uso potencial para desinformación o actividades malintencionadas.",
     ];
 
     const background = this.add.sprite(512, 384, "animatedBackground");
