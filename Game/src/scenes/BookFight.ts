@@ -1,6 +1,7 @@
 import { GameObjects, Types, Physics, Actions, Sound } from "phaser";
 import { Scene } from "phaser";
 import { position } from "../main";
+import { globalData } from "../main";
 
 export class BookFight extends Scene {
   background: GameObjects.Image;
@@ -15,9 +16,9 @@ export class BookFight extends Scene {
   heartImages: GameObjects.Image[] = [];
   timeLeft: number = 10; // 60 seconds countdown
   timerEvent: Phaser.Time.TimerEvent;
-  music: Sound.NoAudioSound | Sound.HTML5AudioSound | Sound.WebAudioSound
+  music: Sound.NoAudioSound | Sound.HTML5AudioSound | Sound.WebAudioSound;
 
-  text_color = "#7d6e31"
+  text_color = "#7d6e31";
 
   constructor() {
     super("BookFight");
@@ -33,7 +34,7 @@ export class BookFight extends Scene {
     this.load.image("wall_book", "image/wall.jpg");
     this.load.image("title_book", "image/title.png");
     this.load.image("projectile_book", "image/projectile.png");
-}
+  }
 
   create() {
     this.music = this.sound.add("bach_book");
@@ -81,7 +82,6 @@ export class BookFight extends Scene {
     );
     this.wall.refresh();
 
-
     this.lives_text = this.add.text(
       position(25, 1, "w"),
       position(18, 3, "h"),
@@ -100,22 +100,26 @@ export class BookFight extends Scene {
       const heart = this.add.image(
         this.lives_text.x + this.lives_text.width + 50 + i * 60,
         this.lives_text.y + this.lives_text.height / 2,
-        'hearth'
+        "hearth"
       );
       heart.setScale(0.1);
       this.heartImages.push(heart);
     }
 
     // Add timer text
-    this.timer_text = this.add.text(position(25, 15, "w"), position(18, 3, "h"), "Tiempo: 60", {
-      fontFamily: "Kenney Mini Square",
-      fontSize: 70,
-      color: this.text_color,
-      align: "center",
-      wordWrap: { width: 700, useAdvancedWrap: true },
-      fontStyle: "bold",
-    });
-
+    this.timer_text = this.add.text(
+      position(25, 15, "w"),
+      position(18, 3, "h"),
+      "Tiempo: 60",
+      {
+        fontFamily: "Kenney Mini Square",
+        fontSize: 70,
+        color: this.text_color,
+        align: "center",
+        wordWrap: { width: 700, useAdvancedWrap: true },
+        fontStyle: "bold",
+      }
+    );
 
     this.player = this.physics.add.image(
       position(2, 1, "w"),
@@ -150,7 +154,7 @@ export class BookFight extends Scene {
       delay: 1000,
       callback: this.updateTimer,
       callbackScope: this,
-      loop: true
+      loop: true,
     });
   }
 
@@ -202,14 +206,18 @@ export class BookFight extends Scene {
     this.timer_text.setText(`Tiempo: ${this.timeLeft}`);
 
     if (this.timeLeft <= 0) {
+      globalData.arenasVisited.arena1.owned = true;
       this.endGame("Ganaste!");
     }
   }
 
-  hitProjectile(player: GameObjects.GameObject, projectile: GameObjects.GameObject) {
-    const sfx = this.sound.add('sfx')
-    sfx.play()
-    this.lives--
+  hitProjectile(
+    player: GameObjects.GameObject,
+    projectile: GameObjects.GameObject
+  ) {
+    const sfx = this.sound.add("sfx");
+    sfx.play();
+    this.lives--;
 
     if (this.lives >= 0 && this.lives < this.heartImages.length) {
       this.heartImages[this.lives].setVisible(false);
@@ -223,20 +231,27 @@ export class BookFight extends Scene {
   }
 
   endGame(message: string) {
-    this.music.stop() 
+    this.music.stop();
     this.timerEvent.remove();
     this.physics.pause();
-    this.add.text(position(2, 1, "w"), position(2, 1, "h"), message, {
-      fontFamily: "Kenney Mini Square",
-      fontSize: 70,
-      color: this.text_color,
-      align: "center",
-      wordWrap: { width: 700, useAdvancedWrap: true },
-      fontStyle: "bold",
-    }).setOrigin(0.5);
-      
-    this.time.delayedCall(2000, () => {
-      this.scene.start("Map");
-    }, [], this);
+    this.add
+      .text(position(2, 1, "w"), position(2, 1, "h"), message, {
+        fontFamily: "Kenney Mini Square",
+        fontSize: 70,
+        color: this.text_color,
+        align: "center",
+        wordWrap: { width: 700, useAdvancedWrap: true },
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5);
+
+    this.time.delayedCall(
+      2000,
+      () => {
+        this.scene.start("Map");
+      },
+      [],
+      this
+    );
   }
 }

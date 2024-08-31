@@ -367,7 +367,6 @@ export class Map extends Scene {
       this.triggerFightScene();
     }
     const speed = 175;
-    const prevVelocity = this.player.body.velocity.clone();
 
     this.player.body.setVelocity(0);
 
@@ -398,10 +397,5 @@ export class Map extends Scene {
     } else {
       this.player.anims.stop();
     }
-
-    if (prevVelocity.x < 0) this.player.setTexture("player", "misa-left");
-    else if (prevVelocity.x > 0) this.player.setTexture("player", "misa-right");
-    else if (prevVelocity.y < 0) this.player.setTexture("player", "misa-back");
-    else if (prevVelocity.y > 0) this.player.setTexture("player", "misa-front");
   }
 }
