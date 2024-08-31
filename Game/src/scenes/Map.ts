@@ -275,7 +275,11 @@ export class Map extends Scene {
     this.physics.add.overlap(this.player, this.modelZone, () => {
       globalData.spawnPoint = { x: this.player.x, y: this.player.y };
       this.score.setText(globalData.teraflops.toString());
-      this.scene.start("TrainingModel");
+      if (globalData.newData) {
+        this.scene.start("TrainingModel");
+      } else {
+        this.scene.start("Model");
+      }
     });
 
     //------------------------------/SE AGREGA MODEL EN EL INICIO---------------------------------//
