@@ -57,8 +57,11 @@ export class Preloader extends Scene {
 
     this.load.image("tile1", "/tilesets/CP_V1.0.4.png");
     this.load.image("tile2", "/tilesets/tilemap_packed.png");
+
     this.load.image("dictionary", "/dict_fight/image/projectile.png");
+    this.load.image("calculator", "/math_fight/image/projectile.png");
     this.load.image("books", "books.png");
+
     this.load.tilemapTiledJSON("map", "/tilemaps/AI_Land.json");
     this.load.atlas("player", "/player/atlas.png", "/player/atlas.json");
   }

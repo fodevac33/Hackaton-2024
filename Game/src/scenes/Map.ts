@@ -49,6 +49,13 @@ export class Map extends Scene {
         scale: 0.07,
         owned: globalData.arenasVisited.arena1.owned,
       },
+      {
+        name: "calculator",
+        x: 610,
+        y: 270,
+        scale: 0.06,
+        owned: globalData.arenasVisited.arena3.owned,
+      },
     ];
 
     dataInterface.forEach((data) => {

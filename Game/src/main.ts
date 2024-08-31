@@ -34,6 +34,10 @@ export const globalData = {
       scene: "DictFight",
       owned: false,
     },
+    arena3: {
+      scene: "MathFight",
+      owned: false,
+    },
   },
 };
 
