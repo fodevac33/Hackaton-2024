@@ -51,20 +51,20 @@
       "name": "Arenas",
       "objects": [
         {
-          "height": 71,
+          "height": 75,
           "id": 23,
-          "name": "",
+          "name": "arena1",
           "rotation": 0,
           "type": "",
           "visible": true,
-          "width": 61,
+          "width": 55.6666666666666,
           "x": 533,
           "y": 134
         },
         {
           "height": 37,
           "id": 24,
-          "name": "",
+          "name": "arena4",
           "rotation": 0,
           "type": "",
           "visible": true,
@@ -73,20 +73,9 @@
           "y": 87
         },
         {
-          "height": 0,
-          "id": 25,
-          "name": "",
-          "rotation": 0,
-          "type": "",
-          "visible": true,
-          "width": 0,
-          "x": 214,
-          "y": 103
-        },
-        {
           "height": 52,
           "id": 26,
-          "name": "",
+          "name": "arena5",
           "rotation": 0,
           "type": "",
           "visible": true,
@@ -97,7 +86,7 @@
         {
           "height": 46,
           "id": 27,
-          "name": "",
+          "name": "arena3",
           "rotation": 0,
           "type": "",
           "visible": true,
@@ -108,7 +97,7 @@
         {
           "height": 39,
           "id": 28,
-          "name": "",
+          "name": "arena2",
           "rotation": 0,
           "type": "",
           "visible": true,
@@ -142,7 +131,7 @@
       ],
       "opacity": 1,
       "type": "objectgroup",
-      "visible": true,
+      "visible": false,
       "x": 0,
       "y": 0
     },
@@ -165,7 +154,7 @@
       ],
       "opacity": 1,
       "type": "objectgroup",
-      "visible": true,
+      "visible": false,
       "x": 0,
       "y": 0
     },
@@ -243,7 +232,7 @@
       ],
       "opacity": 1,
       "type": "objectgroup",
-      "visible": true,
+      "visible": false,
       "x": 0,
       "y": 0
     },
@@ -256,14 +245,14 @@
       "name": "AbovePlayer",
       "opacity": 1,
       "type": "tilelayer",
-      "visible": true,
+      "visible": false,
       "width": 64,
       "x": 0,
       "y": 0
     }
   ],
   "nextlayerid": 14,
-  "nextobjectid": 30,
+  "nextobjectid": 32,
   "orientation": "orthogonal",
   "renderorder": "right-down",
   "tiledversion": "1.11.0",

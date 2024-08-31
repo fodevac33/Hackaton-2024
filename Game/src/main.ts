@@ -20,12 +20,21 @@ export const resolution = {
 export const globalData = {
   teraflops: 0,
   coolDataIndex: 0,
-  level: 1,
   spawnPoint: {
     x: 0,
     y: 0,
   },
   modelLevel: 1,
+  arenasVisited: {
+    arena1: {
+      scene: "BookFight",
+      owned: false,
+    },
+    arena2: {
+      scene: "DictFight",
+      owned: false,
+    },
+  },
 };
 
 export const position = (divisions: number, place: number, dim: string) => {
@@ -82,6 +91,8 @@ const config: Types.Core.GameConfig = {
     BookFight,
     DictFight,
     MathFight,
+    Info,
+    Model,
   ],
 };
 

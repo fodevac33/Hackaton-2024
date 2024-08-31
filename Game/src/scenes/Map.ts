@@ -10,6 +10,8 @@ export class Map extends Scene {
   gpu: Phaser.GameObjects.Image;
   score: Phaser.GameObjects.Text;
   modelZone: Phaser.GameObjects.Zone;
+  dictionary: Phaser.GameObjects.Image;
+  books: Phaser.GameObjects.Image;
   fightTriggered: boolean;
 
   constructor() {
@@ -25,10 +27,43 @@ export class Map extends Scene {
     const map = this.make.tilemap({ key: "map" });
     this.camera.setZoom(2.8, 2.8);
     this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    // Interface global
     this.gpu = this.add.image(360, 270, "gpu");
     this.gpu.setScale(0.06);
     this.gpu.setScrollFactor(0);
     this.gpu.setDepth(20);
+
+    const dataInterface = [
+      {
+        name: "dictionary",
+        x: 670,
+        y: 270,
+        scale: 0.04,
+        owned: globalData.arenasVisited.arena2.owned,
+      },
+      {
+        name: "books",
+        x: 640,
+        y: 270,
+        scale: 0.07,
+        owned: globalData.arenasVisited.arena1.owned,
+      },
+    ];
+
+    dataInterface.forEach((data) => {
+      const image = this.add.image(data.x, data.y, data.name);
+
+      image.setScale(data.scale);
+      image.setScrollFactor(0);
+      image.setDepth(20);
+
+      (this as Record<string, any>)[data.name] = image;
+
+      if (!data.owned) {
+        image.setAlpha(0.5);
+      }
+    });
 
     this.score = this.add.text(385, 258, globalData.teraflops.toString(), {
       fontFamily: "Kenney Mini Square",
@@ -37,11 +72,12 @@ export class Map extends Scene {
       stroke: "#000",
       strokeThickness: 3,
       align: "center",
-      // fontStyle: "bold",
     });
 
     this.score.setScrollFactor(0);
     this.score.setDepth(40);
+
+    /////
 
     const tileset1 = map.addTilesetImage("base_design_opt2", "tile1");
     const tileset2 = map.addTilesetImage("base_design", "tile2");
@@ -69,6 +105,7 @@ export class Map extends Scene {
       return null;
     }
 
+    // Dont erase this line!
     const belowLayer = map.createLayer(
       "BelowPlayer",
       [tileset1, tileset2],
@@ -138,20 +175,31 @@ export class Map extends Scene {
     if (arenasLayer) {
       const arenas = this.physics.add.staticGroup();
       arenasLayer.objects.forEach((objData) => {
-        const { x = 0, y = 0, width = 0, height = 0 } = objData;
+        const { x = 0, y = 0, width = 0, height = 0, name = "" } = objData;
         const arena = this.add.rectangle(
           x + width / 2,
           y + height / 2,
           width - 20,
           height - 20
         );
+        arena.setData("name", name);
         arenas.add(arena);
       });
 
-      this.physics.add.overlap(this.player, arenas, () => {
+      this.physics.add.overlap(this.player, arenas, (player, arena) => {
         globalData.spawnPoint = { x: this.player.x, y: this.player.y };
-        this.score.setText(globalData.teraflops.toString());
-        this.scene.start("BookFight");
+
+        if (arena instanceof Phaser.GameObjects.GameObject) {
+          const arenaName = arena.getData(
+            "name"
+          ) as keyof typeof globalData.arenasVisited;
+
+          if (!globalData.arenasVisited[arenaName].owned) {
+            const nextScene = globalData.arenasVisited[arenaName].scene;
+            this.score.setText(globalData.teraflops.toString());
+            this.scene.start(nextScene);
+          }
+        }
       });
     }
 
