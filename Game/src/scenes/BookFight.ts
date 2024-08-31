@@ -6,13 +6,18 @@ export class BookFight extends Scene {
   background: GameObjects.Image;
   title: GameObjects.Image;
   lives_text: GameObjects.Text;
+  timer_text: GameObjects.Text;
   player: Types.Physics.Arcade.ImageWithDynamicBody;
   wall: Physics.Arcade.StaticGroup;
   cursors: Types.Input.Keyboard.CursorKeys;
   projectiles: Physics.Arcade.Group;
-  music: Sound.WebAudioSound | Sound.NoAudioSound | Sound.HTML5AudioSound;
   lives: number = 3;
-  lifeText: string[];
+  heartImages: GameObjects.Image[] = [];
+  timeLeft: number = 10; // 60 seconds countdown
+  timerEvent: Phaser.Time.TimerEvent;
+  music: Sound.NoAudioSound | Sound.HTML5AudioSound | Sound.WebAudioSound
+
+  text_color = "#7d6e31"
 
   constructor() {
     super("BookFight");
@@ -35,6 +40,7 @@ export class BookFight extends Scene {
     this.music = this.sound.add("bach");
     this.music.play("", {
       volume: 0.7,
+      detune: 0,
     });
 
     if (this.input.keyboard?.createCursorKeys()) {
@@ -76,21 +82,41 @@ export class BookFight extends Scene {
     );
     this.wall.refresh();
 
-    this.lifeText = ["Vidas I", "Vidas I I", "Vidas I I I"];
 
     this.lives_text = this.add.text(
       position(25, 1, "w"),
       position(18, 3, "h"),
-      this.lifeText[this.lives - 1],
+      "Vidas ",
       {
         fontFamily: "Kenney Mini Square",
         fontSize: 70,
-        color: "#7d6e31",
+        color: this.text_color,
         align: "center",
         wordWrap: { width: 700, useAdvancedWrap: true },
         fontStyle: "bold",
       }
     );
+
+    for (let i = 0; i < 3; i++) {
+      const heart = this.add.image(
+        this.lives_text.x + this.lives_text.width + 50 + i * 60,
+        this.lives_text.y + this.lives_text.height / 2,
+        'hearth'
+      );
+      heart.setScale(0.1);
+      this.heartImages.push(heart);
+    }
+
+    // Add timer text
+    this.timer_text = this.add.text(position(25, 15, "w"), position(18, 3, "h"), "Tiempo: 60", {
+      fontFamily: "Kenney Mini Square",
+      fontSize: 70,
+      color: this.text_color,
+      align: "center",
+      wordWrap: { width: 700, useAdvancedWrap: true },
+      fontStyle: "bold",
+    });
+
 
     this.player = this.physics.add.image(
       position(2, 1, "w"),
@@ -118,6 +144,14 @@ export class BookFight extends Scene {
       callback: this.spawnProjectile,
       callbackScope: this,
       loop: true,
+    });
+
+    // Set up countdown timer
+    this.timerEvent = this.time.addEvent({
+      delay: 1000,
+      callback: this.updateTimer,
+      callbackScope: this,
+      loop: true
     });
   }
 
@@ -164,16 +198,46 @@ export class BookFight extends Scene {
     projectile.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
   }
 
-  hitProjectile(
-    player: GameObjects.GameObject,
-    projectile: GameObjects.GameObject
-  ) {
-    const sfx = this.sound.add("sfx");
-    sfx.play();
-    this.lives--;
+  updateTimer() {
+    this.timeLeft--;
+    this.timer_text.setText(`Tiempo: ${this.timeLeft}`);
 
-    this.lives_text.setText(this.lifeText[this.lives - 1]);
+    if (this.timeLeft <= 0) {
+      this.endGame("Ganaste!");
+    }
+  }
+
+  hitProjectile(player: GameObjects.GameObject, projectile: GameObjects.GameObject) {
+    const sfx = this.sound.add('sfx')
+    sfx.play()
+    this.lives--
+
+    if (this.lives >= 0 && this.lives < this.heartImages.length) {
+      this.heartImages[this.lives].setVisible(false);
+    }
 
     projectile.destroy();
+
+    if (this.lives <= 0) {
+      this.endGame("Perdiste!");
+    }
+  }
+
+  endGame(message: string) {
+    this.music.stop() 
+    this.timerEvent.remove();
+    this.physics.pause();
+    this.add.text(position(2, 1, "w"), position(2, 1, "h"), message, {
+      fontFamily: "Kenney Mini Square",
+      fontSize: 70,
+      color: this.text_color,
+      align: "center",
+      wordWrap: { width: 700, useAdvancedWrap: true },
+      fontStyle: "bold",
+    }).setOrigin(0.5);
+      
+    this.time.delayedCall(2000, () => {
+      this.scene.start("Map");
+    }, [], this);
   }
 }
