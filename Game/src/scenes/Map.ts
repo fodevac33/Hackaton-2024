@@ -56,10 +56,25 @@ export class Map extends Scene {
         scale: 0.06,
         owned: globalData.arenasVisited.arena3.owned,
       },
+      {
+        name: "router",
+        x: 580,
+        y: 270,
+        scale: 0.03,
+        owned: globalData.arenasVisited.arena4.owned,
+      },
+      {
+        name: "keyboard",
+        x: 540,
+        y: 270,
+        scale: 0.04,
+        owned: globalData.arenasVisited.arena5.owned,
+      },
     ];
 
     dataInterface.forEach((data) => {
       const image = this.add.image(data.x, data.y, data.name);
+      console.log(image);
 
       image.setScale(data.scale);
       image.setScrollFactor(0);

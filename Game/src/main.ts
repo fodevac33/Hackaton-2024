@@ -41,6 +41,14 @@ export const globalData = {
       scene: "MathFight",
       owned: false,
     },
+    arena4: {
+      scene: "InternetFight",
+      owned: false,
+    },
+    arena5: {
+      scene: "ProgramFight",
+      owned: false,
+    },
   },
   newData: false,
 };

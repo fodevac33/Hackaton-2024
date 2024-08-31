@@ -27,25 +27,32 @@ export class BookFight extends Scene {
   preload() {
     const graphics = this.add.graphics();
     graphics.fillStyle(0x000000, 1);
-    graphics.fillRect(0, 0, this.sys.game.config.width as number, this.sys.game.config.height as number);
+    graphics.fillRect(
+      0,
+      0,
+      this.sys.game.config.width as number,
+      this.sys.game.config.height as number
+    );
 
     // Add a loading text
-    const loadingText = this.add.text(
-      this.sys.game.config.width as number / 2, 
-      this.sys.game.config.height as number / 2, 
-      'Loading...', 
-      { 
-        font: '20px Arial', 
-        color: '#ffffff' 
-      }
-    ).setOrigin(0.5);
+    const loadingText = this.add
+      .text(
+        (this.sys.game.config.width as number) / 2,
+        (this.sys.game.config.height as number) / 2,
+        "Loading...",
+        {
+          font: "20px Arial",
+          color: "#ffffff",
+        }
+      )
+      .setOrigin(0.5);
 
-    this.load.on('progress', (value: number) => {
+    this.load.on("progress", (value: number) => {
       loadingText.setText(`Loading... ${Math.round(value * 100)}%`);
     });
 
     // Remove the loading text when loading is complete
-    this.load.on('complete', () => {
+    this.load.on("complete", () => {
       loadingText.destroy();
       graphics.destroy();
     });

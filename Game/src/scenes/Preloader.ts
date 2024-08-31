@@ -34,8 +34,7 @@ export class Preloader extends Scene {
       },
     });
 
-
-    this.load.audio('sfx', 'sfx.wav');
+    this.load.audio("sfx", "sfx.wav");
 
     this.load.image("hearth", "hearth.png");
 
@@ -64,6 +63,8 @@ export class Preloader extends Scene {
     this.load.image("dictionary", "/dict_fight/image/projectile.png");
     this.load.image("calculator", "/math_fight/image/projectile.png");
     this.load.image("books", "books.png");
+    this.load.image("keyboard", "/program_fight/image/projectile.png");
+    this.load.image("router", "/internet_fight/image/projectile.png");
 
     this.load.tilemapTiledJSON("map", "/tilemaps/AI_Land.json");
     this.load.atlas("player", "/player/atlas.png", "/player/atlas.json");
