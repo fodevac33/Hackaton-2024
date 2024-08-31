@@ -240,6 +240,7 @@ export class BookFight extends Scene {
     if (this.timeLeft <= 0) {
       globalData.arenasVisited.arena1.owned = true;
       globalData.newData = true;
+      globalData.modelLevel += 1;
       this.endGame("Ganaste!");
     }
   }
@@ -264,9 +265,9 @@ export class BookFight extends Scene {
   }
 
   endGame(message: string) {
-    this.lives = 3
-    this.heartImages = []
-    this.timeLeft = 30
+    this.lives = 3;
+    this.heartImages = [];
+    this.timeLeft = 30;
 
     this.music.stop();
     this.timerEvent.remove();

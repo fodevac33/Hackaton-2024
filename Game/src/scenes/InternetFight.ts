@@ -257,6 +257,7 @@ export class InternetFight extends Scene {
     if (this.timeLeft <= 0) {
       globalData.arenasVisited.arena4.owned = true;
       globalData.newData = true;
+      globalData.modelLevel += 1;
       this.endGame("Ganaste!");
     }
   }

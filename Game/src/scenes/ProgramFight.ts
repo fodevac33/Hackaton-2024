@@ -261,6 +261,7 @@ export class ProgramFight extends Scene {
     if (this.timeLeft <= 0) {
       globalData.arenasVisited.arena5.owned = true;
       globalData.newData = true;
+      globalData.modelLevel += 1;
       this.endGame("Ganaste!");
     }
   }
