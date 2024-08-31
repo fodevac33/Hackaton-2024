@@ -15,7 +15,7 @@ export class MathFight extends Scene {
   lives: number = 3;
   lifeText: string[];
   heartImages: GameObjects.Image[] = [];
-  timeLeft: number = 10; // 60 seconds countdown
+  timeLeft: number = 40; // 60 seconds countdown
   timerEvent: Phaser.Time.TimerEvent;
   music: Sound.NoAudioSound | Sound.HTML5AudioSound | Sound.WebAudioSound;
   constructor() {
@@ -134,7 +134,7 @@ export class MathFight extends Scene {
     this.timer_text = this.add.text(
       position(25, 15, "w"),
       position(18, 3, "h"),
-      "Tiempo: 60",
+      "Tiempo: 40",
       {
         fontFamily: "Kenney Mini Square",
         fontSize: 70,
@@ -254,6 +254,7 @@ export class MathFight extends Scene {
   endGame(message: string) {
     this.lives = 3
     this.heartImages = []
+    this.timeLeft = 40
 
     this.music.stop();
     this.timerEvent.remove();

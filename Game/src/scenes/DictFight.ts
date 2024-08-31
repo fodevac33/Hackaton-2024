@@ -14,7 +14,7 @@ export class DictFight extends Scene {
   projectiles: Physics.Arcade.Group;
   lives: number = 3;
   heartImages: GameObjects.Image[] = [];
-  timeLeft: number = 10; // 60 seconds countdown
+  timeLeft: number = 20; // 60 seconds countdown
   timerEvent: Phaser.Time.TimerEvent;
   music: Sound.NoAudioSound | Sound.HTML5AudioSound | Sound.WebAudioSound;
 
@@ -136,7 +136,7 @@ export class DictFight extends Scene {
     this.timer_text = this.add.text(
       position(25, 15, "w"),
       position(18, 3, "h"),
-      "Tiempo: 60",
+      "Tiempo: 20",
       {
         fontFamily: "Kenney Mini Square",
         fontSize: 70,
@@ -255,6 +255,7 @@ export class DictFight extends Scene {
   endGame(message: string) {
     this.lives = 3
     this.heartImages = []
+    this.timeLeft = 20
 
     this.music.stop();
     this.timerEvent.remove();
