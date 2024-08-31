@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import { resolution } from "../main";
+import { globalData, resolution } from "../main";
 
 export class TrainingModel extends Scene {
   bar: Phaser.GameObjects.Rectangle;
@@ -41,6 +41,37 @@ export class TrainingModel extends Scene {
   }
 
   create() {
+    const teraflops = globalData.teraflops;
+    const modelLevel = globalData.modelLevel;
+
+    if (teraflops < modelLevel * 2) {
+      const msg_text = this.add.text(
+        resolution.width / 2,
+        resolution.height / 2 - 60,
+        "You dont have enough teraflops :(",
+        {
+          fontFamily: "Kenney Mini Square",
+          fontSize: 30,
+          color: "#fff   ",
+          align: "center",
+          fontStyle: "bold",
+        }
+      );
+      msg_text.setOrigin(0.5);
+      msg_text.setScale(1);
+
+      this.time.delayedCall(
+        2000,
+        () => {
+          this.scene.start("Map");
+        },
+        [],
+        this
+      );
+    } else {
+      globalData.teraflops = globalData.teraflops - modelLevel * 2;
+    }
+
     const msg_text = this.add.text(
       resolution.width / 2,
       resolution.height / 2 - 60,
