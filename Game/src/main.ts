@@ -7,7 +7,7 @@ import { Preloader } from "./scenes/Preloader";
 import { Map } from "./scenes/Map";
 import { Model } from "./scenes/Model";
 import { Info } from "./scenes/Info";
-
+import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 import { Game, Types } from "phaser";
 import { DictFight } from "./scenes/DictFight";
 
@@ -59,18 +59,9 @@ const config: Types.Core.GameConfig = {
   height: resolution.height,
   parent: "game-container",
   backgroundColor: "#028af8",
-  scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
+  dom: {
+    createContainer: true,
   },
-  pixelArt: true,
-  physics: {
-    default: "arcade",
-    arcade: {
-      gravity: { x: 0, y: 0 },
-    },
-  },
-
   scene: [
     Boot,
     Preloader,
@@ -81,7 +72,29 @@ const config: Types.Core.GameConfig = {
     BookFight,
     DictFight,
     Info,
+    Model,
   ],
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
+  pixelArt: true,
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: { x: 0, y: 0 },
+      debug: true,
+    },
+  },
+  plugins: {
+    scene: [
+      {
+        key: "rexUI",
+        plugin: RexUIPlugin,
+        mapping: "rexUI",
+      },
+    ],
+  },
 };
 
 export default new Game(config);
