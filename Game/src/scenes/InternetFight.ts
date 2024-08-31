@@ -1,4 +1,3 @@
-
 import { GameObjects, Types, Physics, Actions, Sound } from "phaser";
 import { Scene } from "phaser";
 import { position } from "../main";
@@ -24,32 +23,38 @@ export class InternetFight extends Scene {
   }
 
   preload() {
-
     const graphics = this.add.graphics();
     graphics.fillStyle(0x000000, 1);
-    graphics.fillRect(0, 0, this.sys.game.config.width as number, this.sys.game.config.height as number);
+    graphics.fillRect(
+      0,
+      0,
+      this.sys.game.config.width as number,
+      this.sys.game.config.height as number
+    );
 
     // Add a loading text
-    const loadingText = this.add.text(
-      this.sys.game.config.width as number / 2, 
-      this.sys.game.config.height as number / 2, 
-      'Loading...', 
-      { 
-        font: '20px Arial', 
-        color: '#ffffff' 
-      }
-    ).setOrigin(0.5);
+    const loadingText = this.add
+      .text(
+        (this.sys.game.config.width as number) / 2,
+        (this.sys.game.config.height as number) / 2,
+        "Loading...",
+        {
+          font: "20px Arial",
+          color: "#ffffff",
+        }
+      )
+      .setOrigin(0.5);
 
-    this.load.on('progress', (value: number) => {
+    this.load.on("progress", (value: number) => {
       loadingText.setText(`Loading... ${Math.round(value * 100)}%`);
     });
 
     // Remove the loading text when loading is complete
-    this.load.on('complete', () => {
+    this.load.on("complete", () => {
       loadingText.destroy();
       graphics.destroy();
     });
-    
+
     this.background;
     this.load.setPath("assets/internet_fight");
 
@@ -59,7 +64,7 @@ export class InternetFight extends Scene {
     this.load.image("wall_internet", "image/wall.png");
     this.load.image("title_internet", "image/title.png");
     this.load.image("projectile_internet", "image/projectile.png");
-}
+  }
 
   create() {
     this.music = this.sound.add("music_internet");
@@ -85,7 +90,7 @@ export class InternetFight extends Scene {
       "title_internet"
     );
 
-    this.title.setScale(0.7)
+    this.title.setScale(0.7);
 
     this.wall = this.physics.add.staticGroup();
     const scale = 0.2;
@@ -185,7 +190,7 @@ export class InternetFight extends Scene {
       callbackScope: this,
       loop: true,
     });
-}
+  }
 
   update() {
     this.player.setVelocity(0);
@@ -250,15 +255,16 @@ export class InternetFight extends Scene {
     this.timer_text.setText(`Tiempo: ${this.timeLeft}`);
 
     if (this.timeLeft <= 0) {
-      globalData.arenasVisited.arena3.owned = true;
+      globalData.arenasVisited.arena4.owned = true;
+      globalData.newData = true;
       this.endGame("Ganaste!");
     }
   }
 
   endGame(message: string) {
-    this.lives = 3
-    this.heartImages = []
-    this.timeLeft = 60
+    this.lives = 3;
+    this.heartImages = [];
+    this.timeLeft = 60;
 
     this.music.stop();
     this.timerEvent.remove();
