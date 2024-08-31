@@ -1,5 +1,4 @@
-
-import { GameObjects, Types, Physics, Actions } from "phaser";
+import { GameObjects, Types, Physics, Actions, Sound } from "phaser";
 import { Scene } from "phaser";
 import { position } from "../main";
 
@@ -7,13 +6,17 @@ export class MathFight extends Scene {
   background: GameObjects.Image;
   title: GameObjects.Image;
   lives_text: GameObjects.Text;
+  timer_text: GameObjects.Text;
   player: Types.Physics.Arcade.ImageWithDynamicBody;
   wall: Physics.Arcade.StaticGroup;
   cursors: Types.Input.Keyboard.CursorKeys;
   projectiles: Physics.Arcade.Group;
-  lives: number = 3
-  lifeText: string[]
-
+  lives: number = 3;
+  lifeText: string[];
+  heartImages: GameObjects.Image[] = [];
+  timeLeft: number = 10; // 60 seconds countdown
+  timerEvent: Phaser.Time.TimerEvent;
+  music: Sound.NoAudioSound | Sound.HTML5AudioSound | Sound.WebAudioSound
   constructor() {
     super("MathFight");
   }
@@ -25,15 +28,16 @@ export class MathFight extends Scene {
     this.load.audio('music', 'audio/math.mp3');
     this.load.audio('sfx', 'audio/sfx.wav');
 
-    this.load.image('background_', 'image/background.jpg');
-    this.load.image('wall', 'image/wall.jpg');
+    this.load.image('back', 'image/background.png');
+    this.load.image('wall', 'image/wall.png');
     this.load.image('title', 'image/title.png');
     this.load.image('projectile', 'image/projectile.png');
   }
 
   create() {
-    const music = this.sound.add('music');
-    music.play('', {
+    this.music = this.sound.add('music');
+
+    this.music.play('', {
       volume: 0.7
     });
 
@@ -41,8 +45,8 @@ export class MathFight extends Scene {
       this.cursors = this.input.keyboard.createCursorKeys();
     }
 
-    this.background = this.add.image(position(2, 1, "w"), position(2, 1, "h"), "background_");
-    // this.background.setScale(0.8, 0.7);
+    this.background = this.add.image(position(2, 1, "w"), position(2, 1, "h"), "back");
+    this.background.setScale(0.2, 0.4);
 
     this.title = this.add.image(position(2, 1, "w"), position(8, 7, "h"), "title");
 
@@ -65,16 +69,31 @@ export class MathFight extends Scene {
     );
     this.wall.refresh();
 
-    this.lifeText = [
-      "Vidas I",
-      "Vidas I I",
-      "Vidas I I I"
-    ]
-
-    this.lives_text = this.add.text(position(25, 1, "w"), position(18, 3, "h"), this.lifeText[this.lives-1], {
+    this.lives_text = this.add.text(position(25, 1, "w"), position(18, 3, "h"), "Vidas ", {
       fontFamily: "Kenney Mini Square",
       fontSize: 70,
-      color: "#7d6e31",
+      color: "#ffffff",
+      align: "center",
+      wordWrap: { width: 700, useAdvancedWrap: true },
+      fontStyle: "bold",
+    });
+
+    // Add heart images
+    for (let i = 0; i < 3; i++) {
+      const heart = this.add.image(
+        this.lives_text.x + this.lives_text.width + 50 + i * 60,
+        this.lives_text.y + this.lives_text.height / 2,
+        'hearth'
+      );
+      heart.setScale(0.1);
+      this.heartImages.push(heart);
+    }
+
+    // Add timer text
+    this.timer_text = this.add.text(position(25, 15, "w"), position(18, 3, "h"), "Tiempo: 60", {
+      fontFamily: "Kenney Mini Square",
+      fontSize: 70,
+      color: "#ffffff",
       align: "center",
       wordWrap: { width: 700, useAdvancedWrap: true },
       fontStyle: "bold",
@@ -82,7 +101,7 @@ export class MathFight extends Scene {
 
     this.player = this.physics.add.image(position(2, 1, "w"), position(2, 1, "h"), 'player');
 
-    this.player.body.setSize(this.player.height * 0.9, this.player.width * 1.1);
+    this.player.body.setSize(this.player.height * 0.7, this.player.width * 1.1);
     this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, this.wall);
 
@@ -98,8 +117,16 @@ export class MathFight extends Scene {
 
     // Set up timer to spawn projectiles
     this.time.addEvent({
-      delay: 2000,
+      delay: 1000,
       callback: this.spawnProjectile,
+      callbackScope: this,
+      loop: true
+    });
+
+    // Set up countdown timer
+    this.timerEvent = this.time.addEvent({
+      delay: 1000,
+      callback: this.updateTimer,
       callbackScope: this,
       loop: true
     });
@@ -124,9 +151,8 @@ export class MathFight extends Scene {
   spawnProjectile() {
     const projectile = this.projectiles.create(this.player.x, 0, 'projectile') as Types.Physics.Arcade.ImageWithDynamicBody;
     projectile.setScale(0.12, 0.15);
-    projectile.setAngle(90);
     projectile.refreshBody();
-    projectile.body.setSize(projectile.height * 0.6, projectile.width * 0.6);
+    projectile.body.setSize(projectile.width * 0.5, projectile.height * 0.6);
 
     const angle = Phaser.Math.Angle.Between(
       projectile.x,
@@ -135,7 +161,7 @@ export class MathFight extends Scene {
       this.player.y
     );
 
-    const speed = 100;
+    const speed = 200;
     projectile.setVelocity(
       Math.cos(angle) * speed,
       Math.sin(angle) * speed
@@ -147,8 +173,43 @@ export class MathFight extends Scene {
     sfx.play()
     this.lives--
 
-    this.lives_text.setText(this.lifeText[this.lives-1])
+    // Remove a heart image
+    if (this.lives >= 0 && this.lives < this.heartImages.length) {
+      this.heartImages[this.lives].setVisible(false);
+    }
 
     projectile.destroy();
+
+    // Check if the game should end
+    if (this.lives <= 0) {
+      this.endGame("Perdiste!");
+    }
+  }
+
+  updateTimer() {
+    this.timeLeft--;
+    this.timer_text.setText(`Tiempo: ${this.timeLeft}`);
+
+    if (this.timeLeft <= 0) {
+      this.endGame("Ganaste!");
+    }
+  }
+
+  endGame(message: string) {
+    this.music.stop() 
+    this.timerEvent.remove();
+    this.physics.pause();
+    this.add.text(position(2, 1, "w"), position(2, 1, "h"), message, {
+      fontFamily: "Kenney Mini Square",
+      fontSize: 70,
+      color: "#ffffff",
+      align: "center",
+      wordWrap: { width: 700, useAdvancedWrap: true },
+      fontStyle: "bold",
+    }).setOrigin(0.5);
+      
+    this.time.delayedCall(2000, () => {
+      this.scene.start("Map");
+    }, [], this);
   }
 }

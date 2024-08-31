@@ -34,6 +34,8 @@ export class Preloader extends Scene {
       },
     });
 
+    this.load.image("hearth", "hearth.png");
+
     this.load.image("logo", "logo.png");
 
     this.load.image("buttonPlay", "buttonPlay.png");
