@@ -5,7 +5,7 @@ interface Response {
   message: string;
 }
 
-async function sendPrompt(message: string, digit: number): Promise<Response> {
+async function sendPrompt(message: string): Promise<Response> {
   const options = {
     method: "POST",
     url: `https://api-hackaton-2024.onrender.com/level/${globalData.modelLevel}`,
