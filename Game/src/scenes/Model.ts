@@ -3,8 +3,7 @@ import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 import sendPrompt from "../services/index";
 import { resolution } from "../main";
 export class Model extends Scene {
-  chatHistory = [];
-  chatContainer;
+  chatHistory: [];
   background: Phaser.GameObjects.Image;
   camera: Phaser.Cameras.Scene2D.Camera;
   rexUI: RexUIPlugin;
@@ -12,9 +11,8 @@ export class Model extends Scene {
   cloud: Phaser.GameObjects.Image;
   button: Phaser.GameObjects.Image;
   button2: Phaser.GameObjects.Image;
-  offsetY = 0;
-  maxOffsetY = 0;
-  lines = [];
+  offsetY: number = 0;
+  lines: string[];
 
   constructor() {
     super("Model");
@@ -29,8 +27,12 @@ export class Model extends Scene {
   }
 
   create() {
-    this.camera = this.cameras.main;
+    this.chatHistory = [];
 
+    this.input.keyboard.removeCapture("SPACE");
+    this.input.keyboard.removeCapture("LEFT");
+    this.camera = this.cameras.main;
+    this.offsetY = 0;
     this.camera.setBackgroundColor(0xff0000);
     this.anims.create({
       key: "animatedBackground",
@@ -51,11 +53,10 @@ export class Model extends Scene {
     //--------------------TEXT------------------------/
     this.cloud = this.add.image(510, 710, "chat");
     this.cloud.setScale(0.48);
-    console.log(this.cloud.width, this.cloud.height);
     const inputText = this.add
       .rexInputText(520, 730, 600, 100, {
         type: "textarea",
-        text: "hello world",
+        text: "Escribe un pregunta",
         fontFamily: "Kenney Mini Square",
         fontSize: "25px",
         color: "#000000",
@@ -73,12 +74,6 @@ export class Model extends Scene {
       }
     });
 
-    inputText.on("keydown", function (event) {
-      if (event.key === "Enter") {
-        inputText.setBlur();
-      }
-    });
-
     this.button = this.add.image(895, 710, "plane").setInteractive();
     this.button.setScale(0.035);
 
@@ -86,7 +81,7 @@ export class Model extends Scene {
       const inputContent = inputText.text;
       inputText.setText("");
       console.log(inputContent);
-      if (inputContent !== "" && this.offsetY <= 600) {
+      if (inputContent !== "" && this.offsetY < 600) {
         this.handleUserInput(inputContent);
       }
     });
@@ -102,7 +97,7 @@ export class Model extends Scene {
     //---------------------API-----------------------//
   }
   //-----------------------------CHAT-------------------//
-  handleUserInput(text) {
+  handleUserInput(text: string) {
     this.addToChatHistory("User", text);
     sendPrompt(text, false) // Assume '5' is a fixed level for the API endpoint
       .then((response) => {
@@ -114,6 +109,7 @@ export class Model extends Scene {
       });
   }
   addToChatHistory(speaker, message) {
+    console.log(typeof message);
     this.chatHistory.push({ speaker, message });
     this.updateChatDisplay(speaker, message);
   }
@@ -123,7 +119,6 @@ export class Model extends Scene {
       this.cloud = this.add.image(200, this.offsetY + 30, "chat");
       this.cloud.setScale(0.28);
       const width_user = this.cloud.width * 0.28;
-      console.log(width_user);
       this.msg_text = this.add.text(20, this.offsetY + 10, message, {
         fontFamily: "Kenney Mini Square",
         fontSize: 13,
@@ -137,10 +132,10 @@ export class Model extends Scene {
     }
     if (speaker == "API") {
       let lines = [];
-      if (message.length > 120) {
+      if (message.length > 100) {
         let start = 0;
         while (start < message.length) {
-          let end = start + 155;
+          let end = start + 95;
           if (end > message.length) {
             end = message.length;
           }
@@ -148,7 +143,7 @@ export class Model extends Scene {
           if (segment.length > 0) {
             lines.push(segment.replace(/\s+/g, " "));
           }
-          start += 155;
+          start += 95;
         }
       } else {
         if (message.length > 0) {
@@ -157,7 +152,7 @@ export class Model extends Scene {
           lines = [];
         }
       }
-      console.log(lines);
+
       for (let i = 0; i < lines.length; i++) {
         this.cloud = this.add.image(750, this.offsetY + 30, "chat");
         this.cloud.setScale(0.3);
