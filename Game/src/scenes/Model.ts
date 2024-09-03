@@ -12,7 +12,10 @@ export class Model extends Scene {
   button: Phaser.GameObjects.Image;
   button2: Phaser.GameObjects.Image;
   offsetY: number = 0;
+  maxoffsetY: number = 650;
   lines: string[];
+  maxMessages: number = 7;
+  displayedMessages: [];
 
   constructor() {
     super("Model");
@@ -28,7 +31,7 @@ export class Model extends Scene {
 
   create() {
     this.chatHistory = [];
-
+    this.displayedMessages = [];
     this.input.keyboard.removeCapture("SPACE");
     this.input.keyboard.removeCapture("LEFT");
     this.camera = this.cameras.main;
@@ -81,7 +84,7 @@ export class Model extends Scene {
       const inputContent = inputText.text;
       inputText.setText("");
       console.log(inputContent);
-      if (inputContent !== "" && this.offsetY < 600) {
+      if (inputContent !== "") {
         this.handleUserInput(inputContent);
       }
     });
@@ -111,7 +114,17 @@ export class Model extends Scene {
   addToChatHistory(speaker, message) {
     console.log(typeof message);
     this.chatHistory.push({ speaker, message });
-    this.updateChatDisplay(speaker, message);
+    console.log(this.offsetY);
+
+    if (
+      this.chatHistory.length > this.maxMessages ||
+      this.offsetY > this.maxoffsetY
+    ) {
+      this.chatHistory.shift(); // Remove the oldest message
+      this.refreshChatDisplay(); // Refresh the entire chat display
+    } else {
+      this.updateChatDisplay(speaker, message);
+    }
   }
 
   updateChatDisplay(speaker, message) {
@@ -129,6 +142,10 @@ export class Model extends Scene {
       });
       this.msg_text.setScale(1);
       this.offsetY += 40;
+      this.displayedMessages.push({
+        cloud: this.cloud,
+        msgText: this.msg_text,
+      });
     }
     if (speaker == "API") {
       let lines = [];
@@ -146,11 +163,7 @@ export class Model extends Scene {
           start += 95;
         }
       } else {
-        if (message.length > 0) {
-          lines = [message.trim().replace(/\s+/g, " ")];
-        } else {
-          lines = [];
-        }
+        lines = [message.trim().replace(/\s+/g, " ")];
       }
 
       for (let i = 0; i < lines.length; i++) {
@@ -165,11 +178,32 @@ export class Model extends Scene {
           fontStyle: "bold",
         });
         this.msg_text.setOrigin(0.5);
-        this.offsetY += 70;
+        if (i != lines.length) {
+          this.offsetY += 70;
+          this.displayedMessages.push({
+            cloud: this.cloud,
+            msgText: this.msg_text,
+          });
+        }
       }
     }
+    if (this.displayedMessages.length > this.maxMessages) {
+      const oldest = this.displayedMessages.shift();
+      oldest?.cloud.destroy();
+      oldest?.msgText.destroy();
+    }
+  }
+  refreshChatDisplay() {
+    this.displayedMessages.forEach((msg) => {
+      msg.cloud.destroy();
+      msg.msgText.destroy();
+    });
+    this.displayedMessages = [];
+    this.offsetY = -200;
 
-    this.offsetY += 30;
+    this.chatHistory.forEach((msg) =>
+      this.updateChatDisplay(msg.speaker, msg.message)
+    );
   }
   //-----------------------------/CHAT-------------------//
 
