@@ -5,10 +5,19 @@ interface Response {
   message: string;
 }
 
-async function sendPrompt(message: string, digit: number): Promise<Response> {
+async function sendPrompt(
+  message: string,
+  firstCalled: boolean = false
+): Promise<Response> {
+  let url = "";
+  if (firstCalled) {
+    url = `https://api-hackaton-2024.onrender.com/level/1`;
+  } else {
+    url = `https://api-hackaton-2024.onrender.com/level/${globalData.modelLevel}`;
+  }
   const options = {
     method: "POST",
-    url: `https://api-hackaton-2024.onrender.com/level/${globalData.modelLevel}`,
+    url: url,
     data: {
       prompt: message,
     },

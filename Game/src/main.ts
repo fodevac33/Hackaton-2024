@@ -56,7 +56,7 @@ export const globalData = {
       allowed: false,
     },
   },
-  newData: false,
+  newData: true,
 };
 
 export const position = (divisions: number, place: number, dim: string) => {
@@ -100,7 +100,6 @@ const config: Types.Core.GameConfig = {
     default: "arcade",
     arcade: {
       gravity: { x: 0, y: 0 },
-      debug: false,
     },
   },
   dom: {

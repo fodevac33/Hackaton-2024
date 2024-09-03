@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import sendPrompt from "../services/index";
 
 export class Boot extends Scene {
   constructor() {
@@ -10,6 +11,9 @@ export class Boot extends Scene {
     //  The smaller the file size of the assets, the better, as the Boot Scene itself has no preloader.
 
     this.load.image("background", "assets/bg.png");
+    sendPrompt("Hello world", true).then((response) => {
+      console.log("first called");
+    });
   }
 
   create() {

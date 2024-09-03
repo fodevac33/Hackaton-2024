@@ -104,7 +104,7 @@ export class Model extends Scene {
   //-----------------------------CHAT-------------------//
   handleUserInput(text) {
     this.addToChatHistory("User", text);
-    sendPrompt(text, 5) // Assume '5' is a fixed level for the API endpoint
+    sendPrompt(text, false) // Assume '5' is a fixed level for the API endpoint
       .then((response) => {
         console.log(response);
         this.addToChatHistory("API", response);
