@@ -199,7 +199,7 @@ export class Model extends Scene {
       msg.msgText.destroy();
     });
     this.displayedMessages = [];
-    this.offsetY = -200;
+    this.offsetY = -140;
 
     this.chatHistory.forEach((msg) =>
       this.updateChatDisplay(msg.speaker, msg.message)
