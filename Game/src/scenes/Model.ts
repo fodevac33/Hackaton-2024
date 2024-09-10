@@ -2,6 +2,8 @@ import { Scene } from "phaser";
 import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 import sendPrompt from "../services/index";
 import { resolution } from "../main";
+import { globalData } from "../main";
+
 export class Model extends Scene {
   chatHistory: [];
   background: Phaser.GameObjects.Image;
@@ -12,11 +14,10 @@ export class Model extends Scene {
   button: Phaser.GameObjects.Image;
   button2: Phaser.GameObjects.Image;
   offsetY: number = 0;
-  maxoffsetY: number = 650;
+  maxoffsetY: number = 620;
   lines: string[];
   maxMessages: number = 7;
   displayedMessages: [];
-
   constructor() {
     super("Model");
   }
@@ -30,6 +31,8 @@ export class Model extends Scene {
   }
 
   create() {
+    globalData.modelLevel;
+
     this.chatHistory = [];
     this.displayedMessages = [];
     this.input.keyboard.removeCapture("SPACE");
@@ -47,13 +50,13 @@ export class Model extends Scene {
       repeat: -1,
     });
 
-    //--------------------------------------------
+    //--------------------------------------------]
 
     const background = this.add.sprite(512, 384, "animatedBackground");
     background.setOrigin(0.5, 0.5);
     background.play("animatedBackground");
 
-    //--------------------TEXT------------------------/
+    //--------------------teclado input user ------------------------/
     this.cloud = this.add.image(510, 710, "chat");
     this.cloud.setScale(0.48);
     const inputText = this.add
@@ -71,11 +74,24 @@ export class Model extends Scene {
       .setOrigin(0.5)
       .setFocus();
 
+    //--------------------efectos en el teclado-------------------//
+
     this.input.on("pointerdown", function (pointer, currentlyOver) {
       if (!currentlyOver.includes(inputText)) {
         inputText.setBlur();
       }
     });
+
+    this.input.keyboard.on("keydown-ENTER", () => {
+      const inputContent = inputText.text;
+      inputText.setText("");
+      console.log(inputContent);
+      if (inputContent !== "") {
+        this.handleUserInput(inputContent);
+      }
+    });
+    //--------------------/efectos en el teclado-------------------//
+    //--------------------Botones----------------------------------//
 
     this.button = this.add.image(895, 710, "plane").setInteractive();
     this.button.setScale(0.035);
@@ -96,13 +112,14 @@ export class Model extends Scene {
     this.button2.on("pointerdown", () => {
       this.scene.start("Map");
     });
+    //--------------------/Botones----------------------------------//
 
     //---------------------API-----------------------//
   }
-  //-----------------------------CHAT-------------------//
+  //-----------------------------Envio de informacion -------------------//
   handleUserInput(text: string) {
     this.addToChatHistory("User", text);
-    sendPrompt(text, false) // Assume '5' is a fixed level for the API endpoint
+    sendPrompt(text, false)
       .then((response) => {
         console.log(response);
         this.addToChatHistory("API", response);
@@ -112,16 +129,16 @@ export class Model extends Scene {
       });
   }
   addToChatHistory(speaker, message) {
-    console.log(typeof message);
     this.chatHistory.push({ speaker, message });
-    console.log(this.offsetY);
 
     if (
       this.chatHistory.length > this.maxMessages ||
       this.offsetY > this.maxoffsetY
     ) {
-      this.chatHistory.shift(); // Remove the oldest message
-      this.refreshChatDisplay(); // Refresh the entire chat display
+      this.chatHistory.shift();
+      console.log(this.offsetY);
+      this.refreshChatDisplay();
+      console.log("refresh display");
     } else {
       this.updateChatDisplay(speaker, message);
     }
@@ -129,6 +146,8 @@ export class Model extends Scene {
 
   updateChatDisplay(speaker, message) {
     if (speaker == "User") {
+      console.log("Posicion respuesta de usuario", this.offsetY);
+
       this.cloud = this.add.image(200, this.offsetY + 30, "chat");
       this.cloud.setScale(0.28);
       const width_user = this.cloud.width * 0.28;
@@ -136,7 +155,7 @@ export class Model extends Scene {
         fontFamily: "Kenney Mini Square",
         fontSize: 13,
         color: "#000000",
-        align: "left",
+        align: "center",
         wordWrap: { width: width_user - 200, useAdvancedWrap: true },
         fontStyle: "bold",
       });
@@ -173,10 +192,12 @@ export class Model extends Scene {
           fontFamily: "Kenney Mini Square",
           fontSize: 13,
           color: "#000000",
-          align: "left",
+          align: "center",
           wordWrap: { width: 380, useAdvancedWrap: true },
           fontStyle: "bold",
         });
+        console.log("Posicion respuesta de api", this.offsetY);
+
         this.msg_text.setOrigin(0.5);
         if (i != lines.length) {
           this.offsetY += 70;
@@ -184,9 +205,20 @@ export class Model extends Scene {
             cloud: this.cloud,
             msgText: this.msg_text,
           });
+
+          // eliminamos el mensaje un mensaje previo cuando la respuesta de la api supera el umbral del chat
+          if (this.offsetY > this.maxoffsetY) {
+            this.chatHistory.shift();
+            console.log(this.offsetY);
+            this.refreshChatDisplay();
+          }
         }
       }
     }
+    this.cameras.main.scrollY = Math.max(
+      0,
+      this.offsetY - this.cameras.main.height
+    );
     if (this.displayedMessages.length > this.maxMessages) {
       const oldest = this.displayedMessages.shift();
       oldest?.cloud.destroy();
@@ -199,8 +231,8 @@ export class Model extends Scene {
       msg.msgText.destroy();
     });
     this.displayedMessages = [];
-    this.offsetY = -140;
-
+    this.offsetY = 0;
+    console.log(this.chatHistory);
     this.chatHistory.forEach((msg) =>
       this.updateChatDisplay(msg.speaker, msg.message)
     );
