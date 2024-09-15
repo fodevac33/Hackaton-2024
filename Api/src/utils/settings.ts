@@ -22,7 +22,7 @@ const settings = [
   {
     "model": "meta-llama/llama-3.1-8b-instruct:free",
     "messages": [
-      {"role": "system", "content": "No respondas a la pregunta del usuario. Responde con una frase aleatoria y fuera de tema"},
+      {"role": "system", "content": "No respondas a la pregunta del usuario. Responde con una frase aleatoria , no respondas la pregunta del usuario"},
       {"role": "user", "content": ""},
     ],
     "temperature": 0.9,

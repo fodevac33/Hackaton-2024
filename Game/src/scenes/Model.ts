@@ -2,7 +2,7 @@ import { Scene } from "phaser";
 import RexUIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 import sendPrompt from "../services/index";
 import { resolution } from "../main";
-import { globalData } from "../main";
+import { globalData, model_images } from "../main";
 
 export class Model extends Scene {
   chatHistory: [];
@@ -18,6 +18,8 @@ export class Model extends Scene {
   lines: string[];
   maxMessages: number = 7;
   displayedMessages: [];
+  text: Phaser.GameObjects.Text;
+
   constructor() {
     super("Model");
   }
@@ -31,14 +33,12 @@ export class Model extends Scene {
   }
 
   create() {
-    globalData.modelLevel;
-
     this.chatHistory = [];
     this.displayedMessages = [];
-    this.input.keyboard.removeCapture("SPACE");
-    this.input.keyboard.removeCapture("LEFT");
+    this.input.keyboard!.removeCapture("SPACE");
+    this.input.keyboard!.removeCapture("LEFT");
     this.camera = this.cameras.main;
-    this.offsetY = 0;
+    this.offsetY = 50;
     this.camera.setBackgroundColor(0xff0000);
     this.anims.create({
       key: "animatedBackground",
@@ -56,6 +56,8 @@ export class Model extends Scene {
     background.setOrigin(0.5, 0.5);
     background.play("animatedBackground");
 
+    //-------------------MODELO ACTUAL-------------------------------//
+    this.choose_model(globalData.modelLevel);
     //--------------------teclado input user ------------------------/
     this.cloud = this.add.image(510, 710, "chat");
     this.cloud.setScale(0.48);
@@ -76,13 +78,13 @@ export class Model extends Scene {
 
     //--------------------efectos en el teclado-------------------//
 
-    this.input.on("pointerdown", function (pointer, currentlyOver) {
+    this.input.on("pointerdown", function (currentlyOver) {
       if (!currentlyOver.includes(inputText)) {
         inputText.setBlur();
       }
     });
 
-    this.input.keyboard.on("keydown-ENTER", () => {
+    this.input.keyboard!.on("keydown-ENTER", () => {
       const inputContent = inputText.text;
       inputText.setText("");
       console.log(inputContent);
@@ -114,7 +116,59 @@ export class Model extends Scene {
     });
     //--------------------/Botones----------------------------------//
 
-    //---------------------API-----------------------//
+    //---------------------------------API------------------------------------//
+  }
+  choose_model(number: integer) {
+    if (number == 1) {
+      const image = this.add.image(
+        model_images.level_1.x,
+        model_images.level_1.y,
+        model_images.level_1.name
+      );
+      image.setScale(model_images.level_1.scale);
+      image.setScrollFactor(0);
+      image.setDepth(20);
+    }
+    if (number == 2) {
+      const image = this.add.image(
+        model_images.level_2.x,
+        model_images.level_2.y,
+        model_images.level_2.name
+      );
+      image.setScale(model_images.level_2.scale);
+      image.setScrollFactor(0);
+      image.setDepth(20);
+    }
+    if (number == 3) {
+      const image = this.add.image(
+        model_images.level_3.x,
+        model_images.level_3.y,
+        model_images.level_3.name
+      );
+      image.setScale(model_images.level_3.scale);
+      image.setScrollFactor(0);
+      image.setDepth(20);
+    }
+    if (number == 4) {
+      const image = this.add.image(
+        model_images.level_4.x,
+        model_images.level_4.y,
+        model_images.level_4.name
+      );
+      image.setScale(model_images.level_4.scale);
+      image.setScrollFactor(0);
+      image.setDepth(20);
+    }
+    if (number == 5) {
+      const image = this.add.image(
+        model_images.level_5.x,
+        model_images.level_5.y,
+        model_images.level_5.name
+      );
+      image.setScale(model_images.level_5.scale);
+      image.setScrollFactor(0);
+      image.setDepth(20);
+    }
   }
   //-----------------------------Envio de informacion -------------------//
   handleUserInput(text: string) {
@@ -147,7 +201,14 @@ export class Model extends Scene {
   updateChatDisplay(speaker, message) {
     if (speaker == "User") {
       console.log("Posicion respuesta de usuario", this.offsetY);
-
+      this.text = this.add.text(10, this.offsetY - 25, "USUARIO", {
+        fontFamily: "Kenney Mini Square",
+        fontSize: 23,
+        color: "#00008B",
+        align: "center",
+        fontStyle: "bold",
+      });
+      this.text.setScale(0.8);
       this.cloud = this.add.image(200, this.offsetY + 30, "chat");
       this.cloud.setScale(0.28);
       const width_user = this.cloud.width * 0.28;
@@ -164,6 +225,7 @@ export class Model extends Scene {
       this.displayedMessages.push({
         cloud: this.cloud,
         msgText: this.msg_text,
+        model: this.text,
       });
     }
     if (speaker == "API") {
@@ -184,7 +246,14 @@ export class Model extends Scene {
       } else {
         lines = [message.trim().replace(/\s+/g, " ")];
       }
-
+      this.text = this.add.text(890, this.offsetY - 25, "MODELO", {
+        fontFamily: "Kenney Mini Square",
+        fontSize: 23,
+        color: "#00008B",
+        align: "center",
+        fontStyle: "bold",
+      });
+      this.text.setScale(0.8);
       for (let i = 0; i < lines.length; i++) {
         this.cloud = this.add.image(750, this.offsetY + 30, "chat");
         this.cloud.setScale(0.3);
@@ -204,6 +273,7 @@ export class Model extends Scene {
           this.displayedMessages.push({
             cloud: this.cloud,
             msgText: this.msg_text,
+            model: this.text,
           });
 
           // eliminamos el mensaje un mensaje previo cuando la respuesta de la api supera el umbral del chat
@@ -223,18 +293,20 @@ export class Model extends Scene {
       const oldest = this.displayedMessages.shift();
       oldest?.cloud.destroy();
       oldest?.msgText.destroy();
+      oldest?.model.destroy();
     }
   }
   refreshChatDisplay() {
     this.displayedMessages.forEach((msg) => {
       msg.cloud.destroy();
       msg.msgText.destroy();
+      msg.model.destroy();
     });
     this.displayedMessages = [];
     this.offsetY = 0;
     console.log(this.chatHistory);
     this.chatHistory.forEach((msg) =>
-      this.updateChatDisplay(msg.speaker, msg.message)
+      this.updateChatDisplay(msg.speaker, msg.message, msg.model)
     );
   }
   //-----------------------------/CHAT-------------------//

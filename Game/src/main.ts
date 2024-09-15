@@ -21,6 +21,38 @@ export const resolution = {
   height: 768,
 };
 
+export const model_images = {
+  level_1: {
+    name: "level 1",
+    x: 500,
+    y: 30,
+    scale: 0.15,
+  },
+  level_2: {
+    name: "level 2",
+    x: 500,
+    y: 30,
+    scale: 0.25,
+  },
+  level_3: {
+    name: "level 3",
+    x: 500,
+    y: 30,
+    scale: 0.55,
+  },
+  level_4: {
+    name: "level 4",
+    x: 490,
+    y: 45,
+    scale: 0.13,
+  },
+  level_5: {
+    name: "level 5",
+    x: 500,
+    y: 40,
+    scale: 0.07,
+  },
+};
 export const globalData = {
   teraflops: 0,
   coolDataIndex: 0,

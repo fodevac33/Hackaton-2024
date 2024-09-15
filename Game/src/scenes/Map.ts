@@ -1,6 +1,5 @@
 import { Scene } from "phaser";
 import { globalData, resolution } from "../main";
-import { glob } from "fs";
 
 export class Map extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;

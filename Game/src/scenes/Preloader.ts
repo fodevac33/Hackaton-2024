@@ -47,6 +47,11 @@ export class Preloader extends Scene {
     this.load.image("cloudSpeech", "cloudSpeech.png");
     this.load.image("gpu", "gpu.png");
     this.load.image("chat", "large_chat.png");
+    this.load.image("level 1", "/models_level/level 1.png");
+    this.load.image("level 2", "/models_level/level 2.png");
+    this.load.image("level 3", "/models_level/level 3.png");
+    this.load.image("level 4", "/models_level/level 4.png");
+    this.load.image("level 5", "/models_level/level 5.png");
 
     this.load.spritesheet("animatedBackground", "backgroundCity2.png", {
       frameWidth: 1024,
